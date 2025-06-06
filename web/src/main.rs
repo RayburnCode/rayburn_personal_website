@@ -1,7 +1,7 @@
 
 use dioxus::prelude::*;
 
-use views::{About, Blog, Contact, Home, Navbar, Projects, Resume};
+use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume};
 
 mod components;
 mod views;

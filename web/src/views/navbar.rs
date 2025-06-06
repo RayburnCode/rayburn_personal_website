@@ -2,7 +2,7 @@ use crate::Route;
 use dioxus::prelude::*;
  
 use crate::components::button::{Button, ButtonScheme, ButtonSize};
-const LOGO: Asset = asset!("/assets/logo.png");
+// const LOGO: Asset = asset!("/assets/logo.png");
 
 #[component]
 pub fn Navbar(children: Element) -> Element {
@@ -14,10 +14,10 @@ pub fn Navbar(children: Element) -> Element {
         nav { id: "navbar", class: "w-full  text-white shadow-md",
             div { class: "px-8 py-2 mx-auto flex items-center justify-between",
 
-                // Left side: Logo
-                a { href: "https://rayburnlp.com",
-                    img { class: "h-15", src: LOGO, alt: "Card header image" }
-                }
+                // // Left side: Logo
+                // a { href: "https://dylanrayburn.com.com",
+                //     img { class: "h-15", src: LOGO, alt: "Logo header image" }
+                // }
 
 
                 // Right side: Links and Button
@@ -28,24 +28,24 @@ pub fn Navbar(children: Element) -> Element {
                         "About"
                     }
                     Link {
-                        to: Route::Team {},
+                        to: Route::Blog { id: (1) },
                         class: "hover:text-blue-400 transition",
-                        "Team"
-                    }
-                    Link {
-                        to: Route::Pricing {},
-                        class: "hover:text-blue-400 transition",
-                        "Pricing"
-                    }
-                    Link {
-                        to: Route::Resources {},
-                        class: "hover:text-blue-400 transition",
-                        "Resources"
+                        "Blog"
                     }
                     Link {
                         to: Route::Contact {},
                         class: "hover:text-blue-400 transition",
                         "Contact"
+                    }
+                    Link {
+                        to: Route::Projects {},
+                        class: "hover:text-blue-400 transition",
+                        "Projects"
+                    }
+                    Link {
+                        to: Route::Resume {},
+                        class: "hover:text-blue-400 transition",
+                        "Resume"
                     }
                     Button {
                         button_scheme: ButtonScheme::Custom,

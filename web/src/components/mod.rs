@@ -10,3 +10,6 @@ pub use echo::Echo;
 
 pub mod button;
 pub use button::{Button, ButtonSize, ButtonScheme, ButtonType};
+
+pub mod footer;
+pub use footer::Footer;
