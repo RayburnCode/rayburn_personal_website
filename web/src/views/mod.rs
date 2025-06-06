@@ -18,3 +18,6 @@ pub use projects::Projects;
 
 mod resume;
 pub use resume::Resume;
+
+mod layout;
+pub use layout::AppLayout;

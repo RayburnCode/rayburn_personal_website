@@ -7,3 +7,6 @@ pub use hero::Hero;
 
 mod echo;
 pub use echo::Echo;
+
+pub mod button;
+pub use button::{Button, ButtonSize, ButtonScheme, ButtonType};
