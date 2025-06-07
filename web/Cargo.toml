@@ -8,7 +8,7 @@ edition = "2021"
 
 [dependencies]
 dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
-gloo-timers = "0.3.0"
+gloo-timers = { version = "0.3", features = ["futures"] }
 
 [features]
 default = ["web"]

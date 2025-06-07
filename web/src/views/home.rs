@@ -1,59 +1,22 @@
-use crate::components::{Echo, Hero};
 use dioxus::prelude::*;
 use gloo_timers::future::sleep;
-
-
+use crate::Route;
 
 
 #[component]
 pub fn Home() -> Element {
     // State for typewriter effect
-    let current_text = use_signal(|| String::from(""));
-    let current_index = use_signal(|| 0);
-    let full_text = "Hi, I'm [Your Name]\nBuilding digital experiences";
-    let is_deleting = use_signal(|| false);
+    let current_text = "Hi, I'm [Your Name]";
+
     
     // Animated background state
     let bg_pos = use_signal(|| (0, 0));
     
-    {
-        let current_text = current_text.clone();
-        let current_index = current_index.clone();
-        let is_deleting = is_deleting.clone();
-        use_future(move || {
-            let current_text = current_text.clone();
-            let current_index = current_index.clone();
-            let is_deleting = is_deleting.clone();
-            async move {
-                sleep(std::time::Duration::from_millis(100)).await;
-    
-                let idx = *current_index.read();
-                let mut is_del = is_deleting.write();
-                if *is_del {
-                    if idx > 0 {
-                        current_text.set(full_text[..idx-1].to_string());
-                        current_index.set(idx - 1);
-                    } else {
-                        *is_del = false;
-                    }
-                } else {
-                    if idx < full_text.len() {
-                        current_text.set(full_text[..idx+1].to_string());
-                        current_index.set(idx + 1);
-                    } else {
-                        sleep(std::time::Duration::from_secs(2)).await;
-                        *is_del = true;
-                    }
-                }
-            }
-        });
-    }
-
     // Animate background
     {
-        let bg_pos = bg_pos.clone();
+        let  bg_pos = bg_pos.clone();
         use_future(move || {
-            let bg_pos = bg_pos.clone();
+            let mut bg_pos = bg_pos.clone();
             async move {
                 let mut pos = 0;
                 loop {
@@ -85,32 +48,36 @@ pub fn Home() -> Element {
                     }
                     // Subtitle
                     p { class: "text-xl md:text-2xl opacity-80 mb-12",
-                        "Developer · Designer · Creator"
+                        "Developer · Mortgage Pro · Problem Solver
+"
                     }
                     // Action buttons
                     div { class: "flex flex-wrap justify-center gap-4",
-                        p { "Add something here " }
+                        Link {
+                            to: Route::Projects {},
+                            class: "px-8 py-3 bg-white text-indigo-600 rounded-full font-semibold hover:bg-opacity-90 transition-all transform hover:scale-105 shadow-lg",
+                            "View My Work"
+                        }
+                        Link {
+                            to: Route::About {},
+                            class: "px-8 py-3 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:bg-opacity-10 transition-all transform hover:scale-105",
+                            "About Me"
+                        }
                     }
                 }
                 // Social links (bottom of screen)
                 div { class: "absolute bottom-8 flex gap-6",
                     a {
-                        href: "https://github.com/you",
+                        href: "https://github.com/RayburnCode",
                         target: "_blank",
                         class: "text-white hover:text-indigo-200 transition-colors",
                         "GitHub"
                     }
                     a {
-                        href: "https://linkedin.com/in/you",
+                        href: "https://www.linkedin.com/in/dylan-rayburn-a6b93499/",
                         target: "_blank",
                         class: "text-white hover:text-indigo-200 transition-colors",
                         "LinkedIn"
-                    }
-                    a {
-                        href: "https://twitter.com/you",
-                        target: "_blank",
-                        class: "text-white hover:text-indigo-200 transition-colors",
-                        "Twitter"
                     }
                 }
                 // Scroll indicator

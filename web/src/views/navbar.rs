@@ -23,6 +23,11 @@ pub fn Navbar(children: Element) -> Element {
                 // Right side: Links and Button
                 div { class: "flex gap-6 items-center text-sm text-gray-900",
                     Link {
+                        to: Route::Home {},
+                        class: "hover:text-blue-400 transition",
+                        "Home"
+                    }
+                    Link {
                         to: Route::About {},
                         class: "hover:text-blue-400 transition",
                         "About"
