@@ -21,3 +21,6 @@ pub use resume::Resume;
 
 mod layout;
 pub use layout::AppLayout;
+
+mod blog_by_id;
+pub use blog_by_id::BlogPostDetail;

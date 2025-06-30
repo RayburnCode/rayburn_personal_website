@@ -8,6 +8,10 @@
 2. Install the Tailwind CSS CLI: https://tailwindcss.com/docs/installation
 3. Run the following command in the root of the project to start the Tailwind CSS compiler:
 
+```
+npm install tailwindcss @tailwindcss/cli
+```
+
 ```bash
 npx tailwindcss -i ./tailwind.css -o ./assets/tailwind.css --watch
 ```
