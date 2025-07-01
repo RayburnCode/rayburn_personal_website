@@ -1,7 +1,7 @@
 
 use dioxus::prelude::*;
 
-use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume};
+use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume, BlogPostDetail};
 
 mod components;
 mod views;
@@ -15,10 +15,10 @@ enum Route {
         Home {},
 
         #[route("/blog")]
-        Blog { },
-
-        #[route("/blog/:id")]
-        Blog { id: i32 },
+        Blog {},
+        
+        #[route("/blog/:slug")]
+    BlogPostDetail { slug: String },
 
         #[route("/about")]
         About {},

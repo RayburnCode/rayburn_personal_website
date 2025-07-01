@@ -1,62 +1,94 @@
 use crate::Route;
 use dioxus::prelude::*;
- 
-use crate::components::button::{Button, ButtonScheme, ButtonSize};
-// const LOGO: Asset = asset!("/assets/logo.png");
+use dioxus_router::prelude::use_route;
 
 #[component]
 pub fn Navbar(children: Element) -> Element {
-    let handle_click = move |_| {
-        println!("Button clicked!");
-    };
+    let current_route = use_route::<Route>();
+
+    // Helper function to determine active class
+    fn active_class(route: &Route, current_route: &Route, class: &str) -> String {
+        if route == current_route {
+            format!("{} text-blue-600 font-medium border-b-2 border-blue-600", class)
+        } else {
+            class.to_string()
+        }
+    }
 
     rsx! {
-        nav { id: "navbar", class: "w-full  text-white shadow-md",
-            div { class: "px-8 py-2 mx-auto flex items-center justify-between",
+        nav { 
+            class: "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm",
+            div { class: "px-4 sm:px-6 lg:px-8",
+                div { class: "flex h-16 items-center justify-between",
+                    // Left side (logo/name)
+                    div { class: "flex items-center",
+                        Link { 
+                            to: Route::Home {},
+                            class: "text-xl font-semibold text-gray-900 hover:text-blue-600",
+                            "Your Name"
+                        }
+                    }
 
-                // // Left side: Logo
-                // a { href: "https://dylanrayburn.com.com",
-                //     img { class: "h-15", src: LOGO, alt: "Logo header image" }
-                // }
+                    // Center navigation
+                    div { class: "hidden md:flex items-center space-x-8",
+                        Link {
+                            to: Route::Home {},
+                            class: active_class(
+                                &Route::Home {},
+                                &current_route,
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors"
+                            ),
+                            "Home"
+                        }
+                        Link {
+                            to: Route::About {},
+                            class: active_class(
+                                &Route::About {},
+                                &current_route,
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors"
+                            ),
+                            "About"
+                        }
+                        Link {
+                            to: Route::Projects {},
+                            class: active_class(
+                                &Route::Projects {},
+                                &current_route,
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors"
+                            ),
+                            "Projects"
+                        }
+                        Link {
+                            to: Route::BlogPostDetail { slug: "Blog Posts".to_string() },
+                            class: if matches!(current_route, Route::BlogPostDetail { .. }) {
+                                "text-blue-600 font-medium border-b-2 border-blue-600 px-1 py-2 text-sm transition-colors"
+                            } else {
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors"
+                            },
+                            "Blog"
+                        }
+                    }
 
-
-                // Right side: Links and Button
-                div { class: "flex gap-6 items-center text-sm text-gray-900",
-                    Link {
-                        to: Route::Home {},
-                        class: "hover:text-blue-400 transition",
-                        "Home"
-                    }
-                    Link {
-                        to: Route::About {},
-                        class: "hover:text-blue-400 transition",
-                        "About"
-                    }
-                    Link {
-                        to: Route::Blog { id: (1) },
-                        class: "hover:text-blue-400 transition",
-                        "Blog"
-                    }
-                    Link {
-                        to: Route::Contact {},
-                        class: "hover:text-blue-400 transition",
-                        "Contact"
-                    }
-                    Link {
-                        to: Route::Projects {},
-                        class: "hover:text-blue-400 transition",
-                        "Projects"
-                    }
-                    Link {
-                        to: Route::Resume {},
-                        class: "hover:text-blue-400 transition",
-                        "Resume"
-                    }
-                    Button {
-                        button_scheme: ButtonScheme::Custom,
-                        button_size: ButtonSize::Large,
-                        on_click: handle_click,
-                        "Learn More"
+                    // Right side (CTA/resume)
+                    div { class: "flex items-center space-x-4",
+                        Link {
+                            to: Route::Contact {},
+                            class: active_class(
+                                &Route::Contact {},
+                                &current_route,
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors"
+                            ),
+                            "Contact"
+                        }
+                        Link {
+                            to: Route::Resume {},
+                            class: if matches!(current_route, Route::Resume {}) {
+                                "ml-4 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white shadow focus:outline-none transition-colors"
+                            } else {
+                                "ml-4 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none transition-colors"
+                            },
+                            "Resume"
+                        }
                     }
                 }
             }

@@ -4,6 +4,9 @@ pub use home::Home;
 mod blog;
 pub use blog::Blog;
 
+mod blog_by_id;
+pub use blog_by_id::BlogPostDetail;
+
 mod navbar;
 pub use navbar::Navbar;
 
@@ -22,5 +25,3 @@ pub use resume::Resume;
 mod layout;
 pub use layout::AppLayout;
 
-mod blog_by_id;
-pub use blog_by_id::BlogPostDetail;

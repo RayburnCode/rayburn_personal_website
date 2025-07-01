@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 use dioxus_router::prelude::*;
 use serde::{Deserialize, Serialize};
+use crate::Route;
+use crate::views::Blog;
+
 
 // 1. Define your blog post structure
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -25,51 +28,57 @@ pub fn BlogPostDetail(slug: String) -> Element {
     let error = use_signal::<Option<String>>(|| None);
 
     // Fetch post from Supabase when component mounts
-    use_effect(move || async move {
-        loading.set(true);
-        error.set(None);
-        
-        // Simulate API call - replace with actual Supabase fetch
-        // Example real implementation:
-        /*
-        let client = supabase_rs::new(SUPABASE_URL, SUPABASE_KEY);
-        let response = client.from("posts")
-            .select("*")
-            .eq("slug", slug)
-            .single()
-            .execute()
-            .await;
-        
-        match response {
-            Ok(post) => {
-                post.set(Some(post));
-                loading.set(false);
+    use_effect(move || {
+        let mut post = post.clone();
+        let mut loading = loading.clone();
+        let mut error = error.clone();
+        let slug = slug.clone();
+        wasm_bindgen_futures::spawn_local(async move {
+            loading.set(true);
+            error.set(None);
+
+            // Simulate API call - replace with actual Supabase fetch
+            // Example real implementation:
+            /*
+            let client = supabase_rs::new(SUPABASE_URL, SUPABASE_KEY);
+            let response = client.from("posts")
+                .select("*")
+                .eq("slug", slug)
+                .single()
+                .execute()
+                .await;
+
+            match response {
+                Ok(post) => {
+                    post.set(Some(post));
+                    loading.set(false);
+                }
+                Err(e) => {
+                    error.set(Some(format!("Failed to load post: {}", e)));
+                    loading.set(false);
+                }
             }
-            Err(e) => {
-                error.set(Some(format!("Failed to load post: {}", e)));
-                loading.set(false);
-            }
-        }
-        */
-        
-        // Mock data for demonstration
-        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
-        
-        let mock_post = BlogPost {
-            id: 1,
-            slug: slug.clone(),
-            title: "Combining Finance and Technology".to_string(),
-            content: markdown_content(),
-            excerpt: "How I bridge my financial expertise with my passion for coding...".to_string(),
-            published_at: "2023-10-15".to_string(),
-            updated_at: Some("2023-10-20".to_string()),
-            tags: vec!["Finance".to_string(), "Tech".to_string(), "Career".to_string()],
-            cover_image: Some("/images/blog-finance-tech.jpg".to_string()),
-            author: "Dylan".to_string(),
-        };
-        
-        post.set(Some(mock_post));
-        loading.set(false);
+            */
+
+            // Mock data for demonstration
+            tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+
+            let mock_post = BlogPost {
+                id: 1,
+                slug: slug.clone(),
+                title: "Combining Finance and Technology".to_string(),
+                content: markdown_content(),
+                excerpt: "How I bridge my financial expertise with my passion for coding...".to_string(),
+                published_at: "2023-10-15".to_string(),
+                updated_at: Some("2023-10-20".to_string()),
+                tags: vec!["Finance".to_string(), "Tech".to_string(), "Career".to_string()],
+                cover_image: Some("/images/blog-finance-tech.jpg".to_string()),
+                author: "Dylan".to_string(),
+            };
+
+            post.set(Some(mock_post));
+            loading.set(false);
+        });
     });
 
     rsx! {
@@ -298,23 +307,3 @@ If you're a finance professional looking to add technical skills (or vice versa)
 }
 
 // 3. Update your Route enum to include the blog post detail route
-#[derive(Clone, Routable, Debug, PartialEq)]
-pub enum Route {
-    #[route("/")]
-    Home {},
-    #[route("/blog")]
-    Blog {},
-    #[route("/blog/:slug")]
-    BlogPost { slug: String },
-    #[route("/projects")]
-    Projects {},
-    #[route("/resume")]
-    Resume {},
-    #[route("/contact")]
-    Contact {},
-    #[route("/about")]
-    About {},
-    #[not_found]
-    #[route("/404")]
-    NotFound {},
-}
