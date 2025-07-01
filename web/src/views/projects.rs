@@ -1,5 +1,11 @@
 use dioxus::prelude::*;
 
+const PRINT_ONE: Asset = asset!("/assets/Headshot_Rayburn.png");
+const PRINT_TWO: Asset = asset!("/assets/Headshot_Rayburn.png");
+const PRINT_THREE: Asset = asset!("/assets/Headshot_Rayburn.png");
+
+
+
 #[component]
 pub fn Projects() -> Element {
     rsx! {
@@ -85,7 +91,7 @@ pub fn Projects() -> Element {
                     div { class: "border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-shadow",
                         img { 
                             class: "w-full h-48 object-cover",
-                            src: "/images/3d-print-1.jpg", 
+                            src: PRINT_ONE, 
                             alt: "Custom mortgage calculator stand" 
                         }
                         div { class: "p-6",
@@ -110,7 +116,7 @@ pub fn Projects() -> Element {
                     div { class: "border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-shadow",
                         img { 
                             class: "w-full h-48 object-cover",
-                            src: "/images/3d-print-2.jpg", 
+                            src: PRINT_TWO, 
                             alt: "Loan document organizer" 
                         }
                         div { class: "p-6",
@@ -135,7 +141,7 @@ pub fn Projects() -> Element {
                     div { class: "border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-shadow",
                         img { 
                             class: "w-full h-48 object-cover",
-                            src: "/images/3d-print-3.jpg", 
+                            src: PRINT_THREE, 
                             alt: "Custom keyboard wrist rest" 
                         }
                         div { class: "p-6",

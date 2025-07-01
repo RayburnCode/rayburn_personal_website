@@ -8,6 +8,17 @@ pub fn Resume() -> Element {
             section { class: "mb-8",
                 h2 { class: "text-2xl font-bold mb-4 border-b border-gray-300 dark:border-gray-600 pb-2", "EXPERIENCE" }
                 
+    // Everyone's Processing Company 
+    div { class: "mb-6",
+        h4 { class: "text-xl font-semibold", "Everyone's Processing Company, Glendale, CA - Mortgage Loan Processor" }
+        p { class: "italic text-gray-600 dark:text-gray-400 mb-2", "April 2024 - Present" }
+        ul { class: "list-disc pl-6 space-y-1",
+            li { "Review and process residential mortgage loan applications, ensuring strict compliance with lender guidelines and regulatory requirements throughout the entire loan lifecycle from submission to final approval." }
+            li { "Coordinate between multiple stakeholders including borrowers, loan officers, underwriters, and third-party vendors to collect and verify financial documentation, order property appraisals, and resolve file discrepancies." }
+            li { "Maintain organized loan files and documentation while meeting critical deadlines in a fast-paced lending environment." }
+        }
+    }
+
                 // California Bank & Trust
                 div { class: "mb-6",
                     h4 { class: "text-xl font-semibold", "California Bank & Trust, San Diego, CA - Credit Analyst" }

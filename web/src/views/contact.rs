@@ -121,23 +121,23 @@ pub fn Contact() -> Element {
                     "For professional inquiries related to mortgage and finance: "
                     a {
                         class: "text-blue-600 dark:text-blue-400 hover:underline",
-                        href: "mailto:finance@example.com",
-                        "finance@example.com"
+                        href: "mailto:dylan@rayburnlp.com",
+                        "dylan@rayburnlp.com"
                     }
                 }
                 p {
                     "For technical questions or project collaborations: "
                     a {
                         class: "text-blue-600 dark:text-blue-400 hover:underline",
-                        href: "mailto:tech@example.com",
-                        "tech@example.com"
+                        href: "mailto:tech@dylanrayburn.com",
+                        "tech@dylanrayburn.com"
                     }
                 }
                 p {
                     "Check out my coding projects on "
                     a {
                         class: "text-blue-600 dark:text-blue-400 hover:underline",
-                        href: "https://github.com/yourusername",
+                        href: "https://github.com/RayburnCode",
                         target: "_blank",
                         "GitHub"
                     }

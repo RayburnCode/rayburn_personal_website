@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 use crate::Route;
 
+
+const HEADSHOT: Asset = asset!("/assets/Headshot_Rayburn.png");
+
 #[component]
 pub fn Home() -> Element {
     rsx! {
@@ -26,8 +29,9 @@ pub fn Home() -> Element {
 
                 img { 
     class: "w-32 h-32 rounded-full object-cover mt-8 border-2 border-white shadow-sm",
-    src: "/path/to/headshot.jpg",
+    src: HEADSHOT,
     alt: "Dylan Rayburn"
+
 }
                 
                 // Divider
