@@ -11,10 +11,12 @@ dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
 gloo-timers = { version = "0.3", features = ["futures"] }
 dioxus-signals = "0.6.3"
 serde = "1.0.219"
+chrono = "0.4.41"
 serde_json = "1.0.140"
-tokio = { version = "1.45.1", features = ["rt", "macros", "time"] }
+tokio = { version = "1.46.0", features = ["rt", "macros", "time"] }
 wasm-bindgen-futures = "0.4.50"
 web-sys = "0.3.77"
+instant = { version = "0.1.13", features = ["wasm-bindgen"] }
 
 [features]
 default = ["web"]

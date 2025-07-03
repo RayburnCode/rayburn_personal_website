@@ -50,3 +50,7 @@ fn App() -> Element {
         Router::<Route> {}
     }
 }
+
+
+#[cfg(target_arch = "wasm32")]
+use instant as _;

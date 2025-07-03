@@ -63,23 +63,6 @@ pub fn Home() -> Element {
                     }
                 }
             }
-            // Footer with social links
-            div { class: "py-8 border-t border-gray-200",
-                div { class: "flex justify-center gap-6",
-                    a {
-                        href: "https://github.com/RayburnCode",
-                        target: "_blank",
-                        class: "text-gray-400 hover:text-gray-600 transition-colors",
-                        "GitHub"
-                    }
-                    a {
-                        href: "https://www.linkedin.com/in/dylan-rayburn-a6b93499/",
-                        target: "_blank",
-                        class: "text-gray-400 hover:text-gray-600 transition-colors",
-                        "LinkedIn"
-                    }
-                }
-            }
         }
     }
 }
