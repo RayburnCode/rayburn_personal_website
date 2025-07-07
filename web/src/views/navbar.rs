@@ -66,6 +66,15 @@ pub fn Navbar(children: Element) -> Element {
                             ),
                             "Resume"
                         }
+                        Link {
+                            to: Route::Protected {},
+                            class: active_class(
+                                &Route::Protected {},
+                                &current_route,
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
+                            ),
+                            "Protected"
+                        }
                     }
 
                     // Right side (CTA/resume)
@@ -80,3 +89,8 @@ pub fn Navbar(children: Element) -> Element {
         }
     }
     }
+
+
+
+
+  

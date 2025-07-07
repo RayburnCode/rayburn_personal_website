@@ -1,15 +1,30 @@
-
+// src/main.rs
 use dioxus::prelude::*;
-
-use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume, BlogPostDetail};
+use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume, BlogPostDetail, Protected, Callback, Login};
 
 mod components;
 mod views;
+mod api;
 
-#[derive(Debug, Clone, Routable, PartialEq)]
+const FAVICON: Asset = asset!("/assets/favicon.ico");
+const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
+
+fn main() {
+    dioxus::launch(App);
+}
+
+#[component]
+fn App() -> Element {
+    rsx! {
+        document::Link { rel: "icon", href: FAVICON }
+        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
+        Router::<Route> {}
+    }
+}
+
+#[derive(Debug, Clone, Routable, PartialEq, serde::Serialize, serde::Deserialize)]
 #[rustfmt::skip]
 enum Route {
-
     #[layout(AppLayout)]
         #[route("/")]
         Home {},
@@ -18,7 +33,7 @@ enum Route {
         Blog {},
         
         #[route("/blog/:slug")]
-    BlogPostDetail { slug: String },
+        BlogPostDetail { slug: String },
 
         #[route("/about")]
         About {},
@@ -32,25 +47,15 @@ enum Route {
         #[route("/resume")]
         Resume {},
 
-}
-
-const FAVICON: Asset = asset!("/assets/favicon.ico");
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
-
-fn main() {
-    dioxus::launch(App);
-}
+        #[route("/protected")]
+        Protected {},
+        #[route("/login")]
+        Login {},
 
 
-#[component]
-fn App() -> Element {
-    rsx! {
-        document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
-        Router::<Route> {}
-    }
+        #[route("/callback")]
+        Callback {},
 }
 
 
-#[cfg(target_arch = "wasm32")]
-use instant as _;
+
