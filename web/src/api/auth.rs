@@ -200,3 +200,34 @@ fn create_client() -> SupabaseClient {
         config.app_public_supabase_anon_key.as_str(),
     )
 }
+
+// Server-side Supabase client (for native/server builds)
+#[cfg(not(target_arch = "wasm32"))]
+pub struct ServerSupabaseClient {
+    pub client: postgrest::Postgrest,
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+impl ServerSupabaseClient {
+    pub fn new(url: &str, api_key: &str) -> Self {
+        let client = postgrest::Postgrest::new(&format!("{}/rest/v1", url))
+            .insert_header("apikey", api_key)
+            .insert_header("Authorization", &format!("Bearer {}", api_key));
+        
+        Self { client }
+    }
+
+    pub fn table(&self, table_name: &str) -> postgrest::Builder {
+        self.client.from(table_name)
+    }
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+pub fn create_server_client() -> ServerSupabaseClient {
+    use crate::api::env::EnvConfig;
+    let config = EnvConfig::load();
+    ServerSupabaseClient::new(
+        &config.app_public_supabase_url,
+        &config.app_public_supabase_anon_key,
+    )
+}

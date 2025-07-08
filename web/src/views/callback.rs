@@ -9,18 +9,21 @@ use web_sys::window;
 pub fn Callback() -> Element {
     spawn(async move {
         client! {
-            let hash = window().unwrap().location().hash().unwrap();
-            let params_parsed: HashMap<String, String> = serde_urlencoded::from_str(hash
-                .strip_prefix("#").unwrap())
-            .unwrap();
-            if let (Some(access_token), Some(refresh_token)) = (params_parsed.get("access_token"), 
-                params_parsed.get("refresh_token")) {
-                set_session(
-                    access_token.to_owned(),
-                    refresh_token.to_owned(),
-                ).await;
-                let nav = navigator();
-                nav.replace(Route::Protected {});
+            #[cfg(target_arch = "wasm32")]
+            {
+                let hash = window().unwrap().location().hash().unwrap();
+                let params_parsed: HashMap<String, String> = serde_urlencoded::from_str(hash
+                    .strip_prefix("#").unwrap()).unwrap();
+                
+                if let (Some(access_token), Some(refresh_token)) = (params_parsed.get("access_token"), 
+                    params_parsed.get("refresh_token")) {
+                    set_session(
+                        access_token.to_owned(),
+                        refresh_token.to_owned(),
+                    ).await;
+                    let nav = navigator();
+                    nav.replace(Route::Protected {});
+                }
             }
         }
     });

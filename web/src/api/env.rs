@@ -10,10 +10,23 @@ pub struct EnvConfig {
 
 impl EnvConfig {
     pub fn load() -> Self {
-        dotenv::dotenv().ok(); // Load `.env` file
-        
-        envy::from_env::<EnvConfig>()
-            .expect("Failed to parse environment variables")
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            dotenv::dotenv().ok(); // Load `.env` file
+            
+            envy::from_env::<EnvConfig>()
+                .expect("Failed to parse environment variables")
+        }
+        #[cfg(target_arch = "wasm32")]
+        {
+            // For WASM, we can't use environment variables the same way
+            // You might want to pass these as build-time constants or use a different approach
+            EnvConfig {
+                app_public_id: "your_app_id".to_string(),
+                app_public_supabase_url: "your_supabase_url".to_string(),
+                app_public_supabase_anon_key: "your_anon_key".to_string(),
+            }
+        }
     }
 }
 
