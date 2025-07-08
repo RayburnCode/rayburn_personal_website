@@ -1,7 +1,6 @@
 // src/main.rs
 use dioxus::prelude::*;
-use tracing::info;
-
+ use tracing::info;
 use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume, BlogPostDetail, Protected, Callback, Login};
 
 mod components;
@@ -9,6 +8,21 @@ mod views;
 mod api;
 
 use api::auth::AuthorizedClient;
+
+// Project data structure to match our database schema
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct Project {
+    pub id: i64,
+    pub title: String,
+    pub description: String,
+    pub category: String,
+    pub technologies: Vec<String>,
+    pub image_url: Option<String>,
+    pub github_url: Option<String>,
+    pub demo_url: Option<String>,
+    pub featured: bool,
+    pub created_at: String,
+}
 
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
@@ -111,19 +125,20 @@ async fn test_supabase_connection() -> Result<String, ServerFnError> {
     #[cfg(not(target_arch = "wasm32"))]
     {
         use api::auth::create_server_client;
+        use tracing::info;
         
         info!("Testing Supabase connection by reading projects...");
         
         let client = create_server_client();
         
-        // Query the projects table (which has public read access)
-        let resp = client
+        // First, get a count of all projects
+        let count_resp = client
             .table("projects")
             .select("*")
             .execute()
             .await;
             
-        match resp {
+        match count_resp {
             Ok(response) => {
                 let status = response.status();
                 let text = response.text().await.map_err(|e| ServerFnError::new(e.to_string()))?;
@@ -132,7 +147,19 @@ async fn test_supabase_connection() -> Result<String, ServerFnError> {
                 info!("Supabase response body: {}", text);
                 
                 if status.is_success() {
-                    Ok(format!("✅ Supabase connection successful!\n\nStatus: {}\n\nProjects data:\n{}", status, text))
+                    // Try to parse as JSON to count items
+                    let count_info = match serde_json::from_str::<serde_json::Value>(&text) {
+                        Ok(json) => {
+                            if let Some(array) = json.as_array() {
+                                format!("Found {} projects in database", array.len())
+                            } else {
+                                format!("Response is not an array: {}", text)
+                            }
+                        }
+                        Err(_) => format!("Could not parse JSON: {}", text)
+                    };
+                    
+                    Ok(format!("✅ Supabase connection successful!\n\nStatus: {}\n\n{}\n\nRaw data:\n{}", status, count_info, text))
                 } else {
                     Ok(format!("⚠️ Supabase responded but with error status: {}\n\nResponse: {}", status, text))
                 }
@@ -151,20 +178,22 @@ async fn test_supabase_connection() -> Result<String, ServerFnError> {
 }
 
 #[server(name = GetProjects)]
-async fn get_projects() -> Result<String, ServerFnError> {
+async fn get_projects() -> Result<Vec<Project>, ServerFnError> {
     #[cfg(not(target_arch = "wasm32"))]
     {
         use api::auth::create_server_client;
+        use tracing::info;
         
         info!("Fetching projects from Supabase...");
         
         let client = create_server_client();
         
-        // Query projects with specific fields and ordering
+        // Query projects with specific fields and ordering - remove any potential limits
         let resp = client
             .table("projects")
-            .select("id,title,description,category,technologies,github_url,demo_url,featured,created_at")
+            .select("id,title,description,category,technologies,github_url,demo_url,featured,created_at,image_url")
             .order("created_at.desc")
+            .limit(1000) // Explicitly set a high limit to ensure we get all projects
             .execute()
             .await;
             
@@ -174,8 +203,35 @@ async fn get_projects() -> Result<String, ServerFnError> {
                 
                 if status.is_success() {
                     let text = response.text().await.map_err(|e| ServerFnError::new(e.to_string()))?;
-                    info!("Successfully fetched projects: {}", text);
-                    Ok(text)
+                    info!("Raw Supabase response: {}", text);
+                    info!("Response length: {} characters", text.len());
+                    
+                    // Try to parse the JSON response into our Project struct
+                    match serde_json::from_str::<Vec<Project>>(&text) {
+                        Ok(projects) => {
+                            info!("Successfully parsed {} projects", projects.len());
+                            for (i, project) in projects.iter().enumerate() {
+                                info!("Project {}: '{}' (category: '{}')", i + 1, project.title, project.category);
+                            }
+                            Ok(projects)
+                        }
+                        Err(parse_error) => {
+                            info!("JSON parsing failed: {}", parse_error);
+                            info!("Attempting to parse as serde_json::Value for debugging...");
+                            
+                            match serde_json::from_str::<serde_json::Value>(&text) {
+                                Ok(value) => {
+                                    info!("Raw JSON structure: {:#}", value);
+                                    if let Some(array) = value.as_array() {
+                                        info!("Found {} items in JSON array", array.len());
+                                    }
+                                }
+                                Err(_) => info!("Response is not valid JSON at all")
+                            }
+                            
+                            Err(ServerFnError::new(format!("Failed to parse projects JSON: {}", parse_error)))
+                        }
+                    }
                 } else {
                     let text = response.text().await.map_err(|e| ServerFnError::new(e.to_string()))?;
                     let error_msg = format!("Failed to fetch projects. Status: {}, Response: {}", status, text);
@@ -194,17 +250,4 @@ async fn get_projects() -> Result<String, ServerFnError> {
     {
         Err(ServerFnError::new("Server function called on client side".to_string()))
     }
-}
-
-mod compat;
-
-#[cfg(target_arch = "wasm32")]
-use compat::wasm as platform;
-
-#[cfg(not(target_arch = "wasm32"))]
-use compat::native as platform;
-
-async fn make_request() {
-    let response = platform::fetch("https://api.example.com/data").await;
-    // Handle response
 }

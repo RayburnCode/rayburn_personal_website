@@ -35,7 +35,7 @@ pub fn Home() -> Element {
             match get_projects().await {
                 Ok(result) => {
                     // Pretty format the JSON response
-                    projects_data.set(format!("✅ Projects fetched successfully!\n\n{}", result));
+                    projects_data.set(format!("✅ Projects fetched successfully!\n\n{:?}", result));
                 },
                 Err(e) => projects_data.set(format!("❌ Error fetching projects: {}", e)),
             }
@@ -100,38 +100,32 @@ pub fn Home() -> Element {
                         "Get In Touch"
                     }
                 }
-                
                 // Supabase Connection Test (Development feature)
                 div { class: "mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200 max-w-lg mx-auto",
-                    h3 { class: "text-sm font-medium text-gray-700 mb-3", 
-                        "Database Connection Test" 
-                    }
-                    
+                    h3 { class: "text-sm font-medium text-gray-700 mb-3", "Database Connection Test" }
                     // Connection test button
                     div { class: "flex gap-2 mb-3",
                         button {
                             onclick: test_connection,
                             disabled: is_testing(),
-                            class: if is_testing() {
-                                "px-4 py-2 bg-gray-400 text-white rounded-md text-sm cursor-not-allowed"
+                            class: if is_testing() { "px-4 py-2 bg-gray-400 text-white rounded-md text-sm cursor-not-allowed" } else { "px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors" },
+                            if is_testing() {
+                                "Testing..."
                             } else {
-                                "px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors"
-                            },
-                            if is_testing() { "Testing..." } else { "Test Connection" }
+                                "Test Connection"
+                            }
                         }
-                        
                         button {
                             onclick: fetch_projects,
                             disabled: is_fetching_projects(),
-                            class: if is_fetching_projects() {
-                                "px-4 py-2 bg-gray-400 text-white rounded-md text-sm cursor-not-allowed"
+                            class: if is_fetching_projects() { "px-4 py-2 bg-gray-400 text-white rounded-md text-sm cursor-not-allowed" } else { "px-4 py-2 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition-colors" },
+                            if is_fetching_projects() {
+                                "Fetching..."
                             } else {
-                                "px-4 py-2 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition-colors"
-                            },
-                            if is_fetching_projects() { "Fetching..." } else { "Get Projects" }
+                                "Get Projects"
+                            }
                         }
                     }
-                    
                     // Connection test results
                     if !connection_status().is_empty() {
                         div { class: "mb-3",
@@ -141,7 +135,6 @@ pub fn Home() -> Element {
                             }
                         }
                     }
-                    
                     // Projects data results
                     if !projects_data().is_empty() {
                         div {

@@ -24,13 +24,16 @@ CREATE TABLE blog_posts (
 );
 
 CREATE TABLE contact_submissions (
-    id BIGSERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     message TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    ip_address TEXT,
-    user_agent TEXT
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    ip_address INET,  -- More appropriate type for IP addresses
+    user_agent TEXT,
+    subject TEXT,     -- Optional but useful for categorization
+    status TEXT DEFAULT 'unread',  -- For tracking read/unread/archived
+    metadata JSONB    -- For any additional unstructured data
 );
 
 
