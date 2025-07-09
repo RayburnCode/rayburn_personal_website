@@ -19,12 +19,17 @@ impl EnvConfig {
         }
         #[cfg(target_arch = "wasm32")]
         {
-            // For WASM, we can't use environment variables the same way
-            // You might want to pass these as build-time constants or use a different approach
+            // For WASM, use compile-time environment variables or fallback values
             EnvConfig {
-                app_public_id: "your_app_id".to_string(),
-                app_public_supabase_url: "your_supabase_url".to_string(),
-                app_public_supabase_anon_key: "your_anon_key".to_string(),
+                app_public_id: option_env!("APP_PUBLIC_ID")
+                    .unwrap_or("default_app_id")
+                    .to_string(),
+                app_public_supabase_url: option_env!("APP_PUBLIC_SUPABASE_URL")
+                    .unwrap_or("https://your-project.supabase.co")
+                    .to_string(),
+                app_public_supabase_anon_key: option_env!("APP_PUBLIC_SUPABASE_ANON_KEY")
+                    .unwrap_or("your_anon_key_here")
+                    .to_string(),
             }
         }
     }
