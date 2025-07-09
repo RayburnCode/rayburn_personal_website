@@ -51,10 +51,8 @@ pub fn Navbar(children: Element) -> Element {
                             "Projects"
                         }
                         Link {
-                            to: Route::BlogPostDetail {
-                                slug: "Blog Posts".to_string(),
-                            },
-                            class: if matches!(current_route, Route::BlogPostDetail { .. }) { "text-blue-600 font-medium border-b-2 border-blue-600 px-1 py-2 text-sm transition-colors" } else { "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors" },
+                            to: Route::Blog {},
+                            class: if matches!(current_route, Route::Blog { .. }) { "text-blue-600 font-medium border-b-2 border-blue-600 px-1 py-2 text-sm transition-colors" } else { "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors" },
                             "Blog"
                         }
                         Link {
@@ -66,15 +64,7 @@ pub fn Navbar(children: Element) -> Element {
                             ),
                             "Resume"
                         }
-                        Link {
-                            to: Route::Protected {},
-                            class: active_class(
-                                &Route::Protected {},
-                                &current_route,
-                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
-                            ),
-                            "Protected"
-                        }
+
                         Link {
                             to: Route::Login {},
                             class: active_class(

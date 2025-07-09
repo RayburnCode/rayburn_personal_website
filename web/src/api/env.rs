@@ -25,7 +25,7 @@ impl EnvConfig {
                     .unwrap_or("default_app_id")
                     .to_string(),
                 app_public_supabase_url: option_env!("APP_PUBLIC_SUPABASE_URL")
-                    .unwrap_or("https://your-project.supabase.co")
+                    .unwrap_or("https://your-project.supabase.com")
                     .to_string(),
                 app_public_supabase_anon_key: option_env!("APP_PUBLIC_SUPABASE_ANON_KEY")
                     .unwrap_or("your_anon_key_here")

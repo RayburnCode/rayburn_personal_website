@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use crate::{get_projects, Project};
+use crate::api::projects::{get_projects, Project};
 
 
 
@@ -93,7 +93,6 @@ pub fn Projects() -> Element {
                     }
                 }
             }
-        
         }
     }
 }

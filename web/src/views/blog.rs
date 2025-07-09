@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use crate::api::get_blog;
 use crate::Route;
 use crate::api::blog::{fetch_blog_posts, BlogPost};
 
@@ -7,72 +8,73 @@ use crate::api::blog::{fetch_blog_posts, BlogPost};
 pub fn Blog() -> Element {
     let mut posts = use_signal::<Vec<BlogPost>>(|| vec![]);
     let loading = use_signal(|| false); // Start as false to show content immediately
-    let error = use_signal::<Option<String>>(|| None);
+    let mut error = use_signal::<Option<String>>(|| None);
 
     // Set up mock data immediately
     use_effect(move || {
-        let mock_posts = vec![
-            BlogPost {
-                id: 1,
-                slug: "combining-finance-and-technology".to_string(),
-                excerpt: "Exploring the intersection of finance and technology...".to_string(),
-                title: "Combining Finance and Technology".to_string(),
-                author: "Dylan Rayburn".to_string(),
-                content: "In today's rapidly evolving digital landscape, the intersection of finance and technology has become more crucial than ever. As someone with a background in both fields, I've seen firsthand how technology can revolutionize traditional financial processes and create new opportunities for innovation.
-
-From building automated trading systems to developing personal finance calculators, the possibilities are endless when you combine financial knowledge with programming skills. In this post, I'll share some insights from my journey bridging these two worlds and explore some exciting projects that demonstrate this powerful synergy.".to_string(),
-                published_at: "2024-10-15".to_string(),
-                updated_at: Some("2024-10-16".to_string()),
-                tags: vec!["Finance".to_string(), "Technology".to_string(), "Programming".to_string()],
-                cover_image: Some("/assets/blog-finance-tech.jpg".to_string()),
-            },
-            BlogPost {
-                id: 2,
-                slug: "getting-started-with-3d-printing".to_string(),
-                excerpt: "My journey into 3D printing and how it complements my technical skills...".to_string(),
-                title: "Getting Started with 3D Printing".to_string(),
-                author: "Dylan Rayburn".to_string(),
-                content: "3D printing has opened up a whole new world of creativity and problem-solving for me. What started as curiosity about this emerging technology has evolved into a valuable skill that complements my software development work.
-
-In this post, I'll walk you through my 3D printing journey, from choosing my first printer to designing and printing custom solutions for everyday problems. Whether you're a fellow developer looking to expand your maker skills or someone curious about getting into 3D printing, this guide will give you a solid foundation to start your own journey.".to_string(),
-                published_at: "2024-09-22".to_string(),
-                updated_at: Some("2024-09-23".to_string()),
-                tags: vec!["3D Printing".to_string(), "CAD".to_string(), "Maker".to_string()],
-                cover_image: Some("/assets/blog-3d-printing.jpg".to_string()),
-            },
-            BlogPost {
-                id: 3,
-                slug: "building-financial-tools-with-rust".to_string(),
-                excerpt: "Why I chose Rust for building financial applications and calculators...".to_string(),
-                title: "Building Financial Tools with Rust".to_string(),
-                author: "Dylan Rayburn".to_string(),
-                content: "When it comes to financial applications, precision, performance, and safety are paramount. This is why I chose Rust as my primary language for building financial tools and calculators.
-
-Rust's memory safety guarantees, zero-cost abstractions, and excellent performance characteristics make it an ideal choice for financial software. In this post, I'll share my experience building various financial tools with Rust, including compound interest calculators, portfolio analyzers, and risk assessment tools.".to_string(),
-                published_at: "2024-08-10".to_string(),
-                updated_at: Some("2024-08-12".to_string()),
-                tags: vec!["Rust".to_string(), "Finance".to_string(), "Programming".to_string(), "Web Development".to_string()],
-                cover_image: None,
-            },
-        ];
-
-        // Set mock data immediately
-        posts.set(mock_posts);
-        
         // Try to fetch from Supabase in a separate future
         spawn(async move {
-            match fetch_blog_posts().await {
+            gloo::console::log!("Starting blog post fetch...");
+            match get_blog().await {
                 Ok(fetched_posts) => {
+                    gloo::console::log!("Fetch successful! Posts count:", fetched_posts.len());
                     if !fetched_posts.is_empty() {
                         gloo::console::log!("Successfully fetched", fetched_posts.len(), "blog posts from Supabase");
                         posts.set(fetched_posts);
                     } else {
-                        gloo::console::log!("No posts found in Supabase, keeping mock data");
+                        gloo::console::log!("No posts found in Supabase - this likely means:");
+                        gloo::console::log!("1. No data in your Supabase blog_posts table");
+                        gloo::console::log!("2. Environment variables not set correctly");
+                        gloo::console::log!("3. Table doesn't exist or RLS policies blocking access");
+                        
+                        // Set some temporary mock data since Supabase is empty
+                        let mock_posts = vec![
+                            BlogPost {
+                                id: 1,
+                                slug: "supabase-connection-test".to_string(),
+                                excerpt: "This is a test post showing that Supabase connection works but no data exists...".to_string(),
+                                title: "Supabase Connected (No Data)".to_string(),
+                                author: "System".to_string(),
+                                content: "The Supabase connection is working, but no blog posts were found in the database. This could mean the table is empty or the environment variables need to be configured.".to_string(),
+                                published_at: "2024-01-01".to_string(),
+                                updated_at: None,
+                                created_at: None,
+                                tags: vec!["Debug".to_string(), "Supabase".to_string()],
+                                cover_image: None,
+                            },
+                        ];
+                        posts.set(mock_posts);
                     }
                 }
                 Err(e) => {
-                    gloo::console::warn!("Failed to fetch from Supabase, using mock data:", e.to_string());
-                    // Keep the mock data we already set
+                    gloo::console::error!("Failed to fetch from Supabase:", e.to_string());
+                    gloo::console::log!("This likely means:");
+                    gloo::console::log!("1. Supabase URL/Key not set (check environment variables)");
+                    gloo::console::log!("2. Network connectivity issue");
+                    gloo::console::log!("3. CORS or authentication problems");
+                    gloo::console::log!("4. 406 error usually means missing Accept headers or wrong content type");
+                    gloo::console::log!("5. Table 'blog_posts' doesn't exist in your Supabase database");
+                    
+                    // Set error message for user
+                    error.set(Some(format!("Failed to connect to Supabase: {}", e)));
+                    
+                    // Still provide some content so page isn't empty
+                    let debug_posts = vec![
+                        BlogPost {
+                            id: 1,
+                            slug: "connection-error".to_string(),
+                            excerpt: "Failed to connect to Supabase - check configuration...".to_string(),
+                            title: "Blog Connection Error".to_string(),
+                            author: "System".to_string(),
+                            content: "Unable to connect to Supabase. Please check your environment variables and database configuration. If you're seeing a 406 error, it usually means the blog_posts table doesn't exist or the request headers are incorrect.".to_string(),
+                            published_at: "2024-01-01".to_string(),
+                            updated_at: None,
+                            tags: vec!["Error".to_string(), "Configuration".to_string()],
+                            cover_image: None,
+                            created_at: None,
+                        },
+                    ];
+                    posts.set(debug_posts);
                 }
             }
         });

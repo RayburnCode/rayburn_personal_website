@@ -9,7 +9,7 @@ rsx! {
     div { class: "py-8 border-t border-gray-200 dark:border-gray-700",
         div { class: "flex flex-col items-center gap-6",
             // Company logos/badges row
-            div { class: "flex flex-wrap justify-center gap-4 items-center",
+            div { class: "flex flex-wrap justify-center gap-6 items-center",
                 // GitHub SVG
                 a {
                     href: "https://github.com/RayburnCode",

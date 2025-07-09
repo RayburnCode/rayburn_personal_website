@@ -1,8 +1,8 @@
 use dioxus::prelude::*;
 use crate::Route;
 
-use crate::{test_supabase_connection, get_projects};
-
+use crate::{test_supabase_connection};
+use crate::api::projects::get_projects;
 
 const HEADSHOT: Asset = asset!("/assets/Headshot_Rayburn.png");
 
