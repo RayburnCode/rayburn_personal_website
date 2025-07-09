@@ -10,10 +10,11 @@ pub fn TextInput(
     class: Option<String>,
 ) -> Element {
     let i_placeholder = i_placeholder.unwrap_or_else(|| "".to_string());
+    let custom_class = class.unwrap_or_else(|| "input-primary".to_string());
     rsx! {
         input {
             value: "{i_value}",
-            class: "input-primary",
+            class: "{custom_class}",
             placeholder: "{i_placeholder}",
             oninput: move |event| on_input.call(event),
         }
@@ -28,11 +29,12 @@ pub fn PasswordInput(
     class: Option<String>,
 ) -> Element {
     let i_placeholder = i_placeholder.unwrap_or_else(|| "".to_string());
+    let custom_class = class.unwrap_or_else(|| "input-primary".to_string());
     rsx! {
         input {
             r#type: "password",
             value: "{i_value}",
-            class: "input-primary",
+            class: "{custom_class}",
             placeholder: "{i_placeholder}",
             oninput: move |event| on_input.call(event),
         }

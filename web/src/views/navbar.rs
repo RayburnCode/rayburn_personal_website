@@ -75,6 +75,15 @@ pub fn Navbar(children: Element) -> Element {
                             ),
                             "Protected"
                         }
+                        Link {
+                            to: Route::Login {},
+                            class: active_class(
+                                &Route::Login {},
+                                &current_route,
+                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
+                            ),
+                            "Login"
+                        }
                     }
 
                     // Right side (CTA/resume)
