@@ -18,11 +18,19 @@ npx tailwindcss -i ./tailwind.css -o ./assets/tailwind.css --watch
 
 ### Serving Your App
 
-Run the following command in the root of your project to start developing with the default platform:
+Run the following command in the root of your project to start developing:
 
 ```bash
-dx serve --platform web
+dx serve
 ```
+
+Or using npm:
+
+```bash
+npm run dev
+```
+
+The application will automatically load environment variables from your `.env` file through the build script.
 
 To run for a different platform, use the `--platform platform` flag. E.g.
 

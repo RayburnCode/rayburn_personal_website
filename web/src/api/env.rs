@@ -19,24 +19,19 @@ impl EnvConfig {
         }
         #[cfg(target_arch = "wasm32")]
         {
-            // For WASM, use compile-time environment variables or fallback values
+            // For WASM, use compile-time environment variables set by build.rs
             EnvConfig {
-                app_public_id: option_env!("APP_PUBLIC_ID")
-                    .unwrap_or("default_app_id")
-                    .to_string(),
-                app_public_supabase_url: option_env!("APP_PUBLIC_SUPABASE_URL")
-                    .unwrap_or("https://your-project.supabase.com")
-                    .to_string(),
-                app_public_supabase_anon_key: option_env!("APP_PUBLIC_SUPABASE_ANON_KEY")
-                    .unwrap_or("your_anon_key_here")
-                    .to_string(),
+                app_public_id: env!("APP_PUBLIC_ID").to_string(),
+                app_public_supabase_url: env!("APP_PUBLIC_SUPABASE_URL").to_string(),
+                app_public_supabase_anon_key: env!("APP_PUBLIC_SUPABASE_ANON_KEY").to_string(),
             }
         }
     }
 }
 
 lazy_static::lazy_static! {
-    pub static ref APP_PUBLIC_ID: String = EnvConfig::load().app_public_id;
-    pub static ref APP_PUBLIC_SUPABASE_URL: String = EnvConfig::load().app_public_supabase_url;
-    pub static ref APP_PUBLIC_SUPABASE_ANON_KEY: String = EnvConfig::load().app_public_supabase_anon_key;
+    static ref ENV_CONFIG: EnvConfig = EnvConfig::load();
+    pub static ref APP_PUBLIC_ID: String = ENV_CONFIG.app_public_id.clone();
+    pub static ref APP_PUBLIC_SUPABASE_URL: String = ENV_CONFIG.app_public_supabase_url.clone();
+    pub static ref APP_PUBLIC_SUPABASE_ANON_KEY: String = ENV_CONFIG.app_public_supabase_anon_key.clone();
 }

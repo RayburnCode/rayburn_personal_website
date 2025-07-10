@@ -11,81 +11,6 @@ pub fn Contact() -> Element {
     let mut submit_status = use_signal(|| Option::<String>::None);
     let mut status_type = use_signal(|| String::from("info")); // "success", "error", "info"
 
-    let submit_form = move |event: FormEvent| {
-        event.prevent_default();
-        is_submitting.set(true);
-        submit_status.set(None);
-        
-        let name_val = name.read().clone();
-        let email_val = email.read().clone();
-        let message_val = message.read().clone();
-        
-        spawn(async move {
-            #[cfg(target_arch = "wasm32")]
-            let user_agent = {
-                web_sys::window().and_then(|w| w.navigator().user_agent().ok())
-            };
-            #[cfg(not(target_arch = "wasm32"))]
-            let user_agent = None;
-            
-            let submission = NewContactSubmission {
-                name: name_val,
-                email: email_val,
-                message: message_val,
-                ip_address: None,
-                user_agent,
-                subject: Some("Website Contact Form".to_string()),
-                metadata: Some(json!({
-                    "source": "website",
-                    "timestamp": chrono::Utc::now().to_rfc3339()
-                })),
-            };
-            
-            match submit_contact_form(submission).await {
-                Ok(_) => {
-                    status_type.set("success".to_string());
-                    submit_status.set(Some("🎉 Success! Your message has been sent successfully. We'll get back to you soon!".to_string()));
-                    name.set(String::new());
-                    email.set(String::new());
-                    message.set(String::new());
-                    
-                    // Auto-dismiss success message after 5 seconds
-                    let mut submit_status_clone = submit_status.clone();
-                    spawn(async move {
-                        #[cfg(target_arch = "wasm32")]
-                        {
-                            use gloo_timers::future::TimeoutFuture;
-                            TimeoutFuture::new(5000).await;
-                            submit_status_clone.set(None);
-                        }
-                        #[cfg(not(target_arch = "wasm32"))]
-                        {
-                            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-                            submit_status_clone.set(None);
-                        }
-                    });
-                }
-                Err(error) => {
-                    status_type.set("error".to_string());
-                    let error_msg = if error.contains("HTTP 400") {
-                        "❌ Please check your input and try again."
-                    } else if error.contains("HTTP 401") || error.contains("HTTP 403") {
-                        "🔐 Authentication error. Please try again later."
-                    } else if error.contains("HTTP 500") {
-                        "🔧 Server error. Please try again in a few moments."
-                    } else if error.contains("Failed to fetch") || error.contains("network") {
-                        "🌐 Network error. Please check your connection and try again."
-                    } else {
-                        "⚠️ An unexpected error occurred. Please try again."
-                    };
-                    submit_status.set(Some(format!("{} Error details: {}", error_msg, error)));
-                }
-            }
-            
-            is_submitting.set(false);
-        });
-    };
-
     rsx! {
         div { class: "max-w-6xl mx-auto dark:text-gray-200",
             h1 { class: "text-3xl sm:text-4xl font-bold mb-8", "Get in Touch" }
@@ -94,7 +19,8 @@ pub fn Contact() -> Element {
             }
 
             // Contact Form
-            form { class: "space-y-6 mb-12", onsubmit: submit_form,
+            form { 
+                class: "space-y-6 mb-12",
 
                 // Name Field
                 div {
@@ -145,14 +71,102 @@ pub fn Contact() -> Element {
 
                 // Submit Button
                 button {
-                    class: "px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[140px]",
-                    r#type: "submit",
+                    class: "px-6 py-3 bg-CustomAccent text-CustomBackground rounded-lg hover:bg-CustomHover cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[140px]",
+                    r#type: "button",
                     disabled: *is_submitting.read(),
+                    onclick: move |_| {
+                        let name_val = name.read().clone();
+                        let email_val = email.read().clone();
+                        let message_val = message.read().clone();
+                        
+                        // Basic validation
+                        if name_val.trim().is_empty() || email_val.trim().is_empty() || message_val.trim().is_empty() {
+                            status_type.set("error".to_string());
+                            submit_status.set(Some("❌ Please fill in all required fields.".to_string()));
+                            return;
+                        }
+                        
+                        // Basic email validation
+                        if !email_val.contains('@') || !email_val.contains('.') {
+                            status_type.set("error".to_string());
+                            submit_status.set(Some("❌ Please enter a valid email address.".to_string()));
+                            return;
+                        }
+                        
+                        // Trigger the same logic as form submission
+                        is_submitting.set(true);
+                        submit_status.set(None);
+                        
+                        spawn(async move {
+                            #[cfg(target_arch = "wasm32")]
+                            let user_agent = {
+                                web_sys::window().and_then(|w| w.navigator().user_agent().ok())
+                            };
+                            #[cfg(not(target_arch = "wasm32"))]
+                            let user_agent = None;
+                            
+                            let submission = NewContactSubmission {
+                                name: name_val,
+                                email: email_val,
+                                message: message_val,
+                                ip_address: None,
+                                user_agent,
+                                subject: Some("Website Contact Form".to_string()),
+                                metadata: Some(json!({
+                                    "source": "website",
+                                    "timestamp": chrono::Utc::now().to_rfc3339()
+                                })),
+                            };
+                            
+                            match submit_contact_form(submission).await {
+                                Ok(_) => {
+                                    status_type.set("success".to_string());
+                                    submit_status.set(Some("🎉 Success! Your message has been sent successfully. We'll get back to you soon!".to_string()));
+                                    name.set(String::new());
+                                    email.set(String::new());
+                                    message.set(String::new());
+                                    
+                                    // Auto-dismiss success message after 5 seconds
+                                    let mut submit_status_clone = submit_status.clone();
+                                    spawn(async move {
+                                        #[cfg(target_arch = "wasm32")]
+                                        {
+                                            use gloo_timers::future::TimeoutFuture;
+                                            TimeoutFuture::new(5000).await;
+                                            submit_status_clone.set(None);
+                                        }
+                                        #[cfg(not(target_arch = "wasm32"))]
+                                        {
+                                            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                                            submit_status_clone.set(None);
+                                        }
+                                    });
+                                }
+                                Err(error) => {
+                                    status_type.set("error".to_string());
+                                    let error_msg = if error.contains("HTTP 400") {
+                                        "❌ Please check your input and try again."
+                                    } else if error.contains("HTTP 401") || error.contains("HTTP 403") {
+                                        "🔐 Authentication error. Please try again later."
+                                    } else if error.contains("HTTP 500") {
+                                        "🔧 Server error. Please try again in a few moments."
+                                    } else if error.contains("Failed to fetch") || error.contains("network") {
+                                        "🌐 Network error. Please check your connection and try again."
+                                    } else {
+                                        "⚠️ An unexpected error occurred. Please try again."
+                                    };
+                                    submit_status.set(Some(format!("{} Error details: {}", error_msg, error)));
+                                }
+                            }
+                            
+                            is_submitting.set(false);
+                        });
+                    },
                     if *is_submitting.read() {
                         div { class: "animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" }
                         "Sending..."
                     } else {
-                        "📤 Send Message"
+                        div { class: "flex items-center justify-center gap-2", "Send Message" }
                     }
                 }
 
@@ -199,7 +213,7 @@ pub fn Contact() -> Element {
                 p {
                     "For professional inquiries related to mortgage and finance: "
                     a {
-                        class: "text-blue-600 dark:text-blue-400 hover:underline",
+                        class: "text-blue-200 dark:text-blue-400 hover:underline",
                         href: "mailto:dylan@rayburnlp.com",
                         "dylan@rayburnlp.com"
                     }
@@ -207,7 +221,7 @@ pub fn Contact() -> Element {
                 p {
                     "For technical questions or project collaborations: "
                     a {
-                        class: "text-blue-600 dark:text-blue-400 hover:underline",
+                        class: "text-blue-200 dark:text-blue-400 hover:underline",
                         href: "mailto:tech@dylanrayburn.com",
                         "tech@dylanrayburn.com"
                     }
@@ -215,7 +229,7 @@ pub fn Contact() -> Element {
                 p {
                     "Check out my coding projects on "
                     a {
-                        class: "text-blue-600 dark:text-blue-400 hover:underline",
+                        class: "text-blue-200 dark:text-blue-400 hover:underline",
                         href: "https://github.com/RayburnCode",
                         target: "_blank",
                         "GitHub"

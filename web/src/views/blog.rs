@@ -83,9 +83,9 @@ pub fn Blog() -> Element {
     rsx! {
         div { class: "max-w-6xl mx-auto",
             // Hero section
-            div { class: "py-12 mb-12",
+            div { class: "",
                 h1 { class: "text-3xl sm:text-4xl font-bold mb-8", "Blog" }
-                p { class: "mb-12 text-lg leading-relaxed",
+                p { class: " text-lg leading-relaxed pb-2",
                     "Exploring the intersection of finance, technology, and innovation. Sharing insights from my journey as a developer, 3D printing enthusiast, and financial professional."
                 }
             }

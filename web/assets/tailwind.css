@@ -1040,6 +1040,12 @@
   .text-CustomHoverDarker {
     color: var(--color-CustomHoverDarker);
   }
+  .text-CustomNav {
+    color: var(--color-CustomNav);
+  }
+  .text-blue-200 {
+    color: var(--color-blue-200);
+  }
   .text-blue-600 {
     color: var(--color-blue-600);
   }
@@ -1212,6 +1218,13 @@
       @media (hover: hover) {
         --tw-translate-x: calc(var(--spacing) * 1);
         translate: var(--tw-translate-x) var(--tw-translate-y);
+      }
+    }
+  }
+  .hover\:bg-CustomHover {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-CustomHover);
       }
     }
   }
