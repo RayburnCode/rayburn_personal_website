@@ -96,7 +96,7 @@ pub fn Home() -> Element {
                     }
                     Link {
                         to: Route::Contact {},
-                        class: "px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-100 transition-colors",
+                        class: "px-6 py-3 border border-gray-300 text-CustomAccent bg-CustomNav rounded-md font-medium hover:bg-gray-100 transition-colors",
                         "Get In Touch"
                     }
                 }

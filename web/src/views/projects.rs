@@ -100,8 +100,8 @@ pub fn Projects() -> Element {
 #[component]
 fn ProjectCard(project: Project) -> Element {
     rsx! {
-        div { class: "border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow",
-            h3 { class: "text-xl font-semibold mb-2", "{project.title}" }
+        div { class: "border border-gray-200 bg-CustomAccent dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow",
+            h3 { class: "text-xl text-CustomBackground font-semibold mb-2", "{project.title}" }
             p { class: "text-gray-600 dark:text-gray-400 mb-4", "{project.description}" }
             div { class: "flex flex-wrap gap-2 mb-4",
                 for tech in project.technologies.iter() {
@@ -140,14 +140,14 @@ fn ProjectCard(project: Project) -> Element {
 fn ProjectCard3D(project: Project) -> Element {
     
     rsx! {
-        div { class: "border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-shadow",
+        div { class: "border border-gray-200 bg-CustomAccent dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-shadow",
             img {
                 class: "w-full h-48 object-cover",
                 src: "{project.image_url.as_deref().unwrap_or(\"/placeholder.png\")}",
                 alt: "{project.title}",
             }
             div { class: "p-6",
-                h3 { class: "text-xl font-semibold mb-2", "{project.title}" }
+                h3 { class: "text-xl text-CustomBackground font-semibold mb-2", "{project.title}" }
                 p { class: "text-gray-600 dark:text-gray-400 mb-4", "{project.description}" }
                 div { class: "flex flex-wrap gap-2 mb-4",
                     for tech in project.technologies.iter() {

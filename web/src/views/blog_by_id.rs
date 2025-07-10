@@ -59,7 +59,7 @@ pub fn BlogPostDetail(slug: String) -> Element {
                     // Back button
                     Link {
                         to: Route::Blog {},
-                        class: "inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline mb-8",
+                        class: "inline-flex items-center text-CustomHover dark:text-blue-400 hover:underline mb-8",
                         svg {
                             class: "w-5 h-5 mr-2",
                             fill: "none",
@@ -85,11 +85,11 @@ pub fn BlogPostDetail(slug: String) -> Element {
                             }
                         }
                         // Title
-                        h1 { class: "text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4",
+                        h1 { class: "text-3xl md:text-4xl font-bold text-CustomAccent dark:text-white mb-4",
                             "{post.title}"
                         }
                         // Meta
-                        div { class: "flex items-center text-sm text-gray-500 dark:text-gray-400",
+                        div { class: "flex items-center text-sm text-gray-300 dark:text-gray-400",
                             // Author
                             span { class: "flex items-center mr-6",
                                 svg {
@@ -149,21 +149,7 @@ pub fn BlogPostDetail(slug: String) -> Element {
                     footer { class: "mt-12 pt-8 border-t border-gray-200 dark:border-gray-700",
                         div { class: "flex justify-between items-center",
                             // Share buttons
-                            div { class: "flex space-x-4",
-                                p { class: "text-sm text-gray-500 dark:text-gray-400 mr-2",
-                                    "Share:"
-                                }
-                                a {
-                                    href: "#",
-                                    class: "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300",
-                                    "Twitter"
-                                }
-                                a {
-                                    href: "#",
-                                    class: "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300",
-                                    "LinkedIn"
-                                }
-                            }
+                            div { class: "flex space-x-4" }
                             // Back to top
                             button {
                                 onclick: move |_| {
@@ -171,7 +157,7 @@ pub fn BlogPostDetail(slug: String) -> Element {
                                         window.scroll_to_with_x_and_y(0.0, 0.0);
                                     }
                                 },
-                                class: "text-blue-600 dark:text-blue-400 hover:underline flex items-center",
+                                class: "text-CustomHover cursor-pointer dark:text-blue-400 hover:underline flex items-center",
                                 svg {
                                     class: "w-4 h-4 mr-1",
                                     fill: "none",

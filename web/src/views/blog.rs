@@ -81,14 +81,14 @@ pub fn Blog() -> Element {
     });
 
     rsx! {
-        div { class: "min-h-screen bg-gray-50 dark:bg-gray-900",
+        div { class: "min-h-screen  dark:bg-gray-900",
             div { class: "max-w-6xl mx-auto p-6",
                 // Hero section
-                div { class: "text-center py-12 mb-12",
-                    h1 { class: "text-5xl font-bold text-gray-900 dark:text-white mb-6",
+                div { class: "text-center py-6 mb-6",
+                    h1 { class: "text-5xl font-bold text-CustomAccent dark:text-white mb-6",
                         "Blog"
                     }
-                    p { class: "text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed",
+                    p { class: "text-xl text-CustomAccent dark:text-gray-300 max-w-3xl mx-auto leading-relaxed",
                         "Exploring the intersection of finance, technology, and innovation. Sharing insights from my journey as a developer, 3D printing enthusiast, and financial professional."
                     }
                 }

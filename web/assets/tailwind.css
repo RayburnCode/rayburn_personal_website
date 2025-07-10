@@ -400,9 +400,6 @@
   .h-5 {
     height: calc(var(--spacing) * 5);
   }
-  .h-8 {
-    height: calc(var(--spacing) * 8);
-  }
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
@@ -441,9 +438,6 @@
   }
   .w-5 {
     width: calc(var(--spacing) * 5);
-  }
-  .w-8 {
-    width: calc(var(--spacing) * 8);
   }
   .w-12 {
     width: calc(var(--spacing) * 12);
@@ -746,20 +740,14 @@
   .border-t-transparent {
     border-top-color: transparent;
   }
-  .bg-BurntSienna {
-    background-color: var(--color-BurntSienna);
-  }
-  .bg-BurntSienna-Darker {
-    background-color: var(--color-BurntSienna-Darker);
+  .bg-CustomAccent {
+    background-color: var(--color-CustomAccent);
   }
   .bg-CustomBackground {
     background-color: var(--color-CustomBackground);
   }
   .bg-CustomHover {
     background-color: var(--color-CustomHover);
-  }
-  .bg-CustomHoverDarker {
-    background-color: var(--color-CustomHoverDarker);
   }
   .bg-CustomNav {
     background-color: var(--color-CustomNav);
@@ -790,6 +778,9 @@
   }
   .bg-gray-400 {
     background-color: var(--color-gray-400);
+  }
+  .bg-gray-500 {
+    background-color: var(--color-gray-500);
   }
   .bg-gray-800 {
     background-color: var(--color-gray-800);
@@ -1013,6 +1004,9 @@
   .text-CustomHover {
     color: var(--color-CustomHover);
   }
+  .text-CustomHoverDarker {
+    color: var(--color-CustomHoverDarker);
+  }
   .text-blue-600 {
     color: var(--color-blue-600);
   }
@@ -1021,6 +1015,9 @@
   }
   .text-blue-800 {
     color: var(--color-blue-800);
+  }
+  .text-gray-300 {
+    color: var(--color-gray-300);
   }
   .text-gray-400 {
     color: var(--color-gray-400);
@@ -1033,9 +1030,6 @@
   }
   .text-gray-700 {
     color: var(--color-gray-700);
-  }
-  .text-gray-800 {
-    color: var(--color-gray-800);
   }
   .text-gray-900 {
     color: var(--color-gray-900);
@@ -1074,6 +1068,12 @@
     &::placeholder {
       color: var(--color-gray-400);
     }
+  }
+  .opacity-25 {
+    opacity: 25%;
+  }
+  .opacity-75 {
+    opacity: 75%;
   }
   .opacity-80 {
     opacity: 80%;
@@ -1182,13 +1182,6 @@
       }
     }
   }
-  .hover\:bg-BurntSienna-Darker {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-BurntSienna-Darker);
-      }
-    }
-  }
   .hover\:bg-CustomHoverDarker {
     &:hover {
       @media (hover: hover) {
@@ -1273,20 +1266,6 @@
       }
     }
   }
-  .hover\:text-black {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-black);
-      }
-    }
-  }
-  .hover\:text-blue-600 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-600);
-      }
-    }
-  }
   .hover\:text-gray-700 {
     &:hover {
       @media (hover: hover) {
@@ -1326,13 +1305,6 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-indigo-700);
-      }
-    }
-  }
-  .hover\:text-pink-600 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-pink-600);
       }
     }
   }
@@ -1510,11 +1482,6 @@
   .md\:grid-cols-2 {
     @media (width >= 48rem) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  .md\:gap-6 {
-    @media (width >= 48rem) {
-      gap: calc(var(--spacing) * 6);
     }
   }
   .md\:p-5 {
@@ -1783,24 +1750,6 @@
       }
     }
   }
-  .dark\:hover\:text-blue-400 {
-    @media (prefers-color-scheme: dark) {
-      &:hover {
-        @media (hover: hover) {
-          color: var(--color-blue-400);
-        }
-      }
-    }
-  }
-  .dark\:hover\:text-gray-200 {
-    @media (prefers-color-scheme: dark) {
-      &:hover {
-        @media (hover: hover) {
-          color: var(--color-gray-200);
-        }
-      }
-    }
-  }
   .dark\:hover\:text-gray-300 {
     @media (prefers-color-scheme: dark) {
       &:hover {
@@ -1833,15 +1782,6 @@
       &:hover {
         @media (hover: hover) {
           color: var(--color-indigo-400);
-        }
-      }
-    }
-  }
-  .dark\:hover\:text-pink-400 {
-    @media (prefers-color-scheme: dark) {
-      &:hover {
-        @media (hover: hover) {
-          color: var(--color-pink-400);
         }
       }
     }
