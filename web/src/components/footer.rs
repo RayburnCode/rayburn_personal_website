@@ -17,7 +17,7 @@ rsx! {
 
             a {
                 class: "text-CustomAccent hover:text-gray-900 dark:hover:text-white",
-                href: "#",
+                href: "https://www.facebook.com/dylan.rayburn.5/",
                 svg {
                     class: "w-5 h-5",
                     fill: "currentColor",
@@ -33,7 +33,7 @@ rsx! {
 
             a {
                 class: "text-CustomAccent hover:text-gray-900 dark:hover:text-white",
-                href: "#",
+                href: "https://www.instagram.com/drayburn/",
                 svg {
                     class: "w-5 h-5",
                     fill: "currentColor",
@@ -50,7 +50,7 @@ rsx! {
 
             a {
                 class: "text-CustomAccent hover:text-gray-900 dark:hover:text-white",
-                href: "#",
+                href: "https://x.com/Dylan_Rayburn",
                 svg {
                     class: "w-5 h-5",
                     fill: "currentColor",
@@ -62,7 +62,7 @@ rsx! {
             // Github
             a {
                 class: "text-CustomAccent hover:text-gray-900 dark:hover:text-white",
-                href: "#",
+                href: "https://github.com/RayburnCode",
                 svg {
                     class: "w-5 h-5",
                     fill: "currentColor",
@@ -78,7 +78,7 @@ rsx! {
             // Linkedin
             a {
                 class: "text-CustomAccent hover:text-gray-900 dark:hover:text-white",
-                href: "#",
+                href: "https://www.linkedin.com/in/dylan-rayburn-a6b93499/",
                 svg {
                     class: "w-5 h-5",
                     fill: "currentColor",
