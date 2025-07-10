@@ -9,21 +9,6 @@ mod api;
 
 use api::auth::AuthorizedClient;
 
-// Project data structure to match our database schema
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-pub struct Project {
-    pub id: i64,
-    pub title: String,
-    pub description: String,
-    pub category: String,
-    pub technologies: Vec<String>,
-    pub image_url: Option<String>,
-    pub github_url: Option<String>,
-    pub demo_url: Option<String>,
-    pub featured: bool,
-    pub created_at: String,
-}
-
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");

@@ -64,99 +64,6 @@ impl From<SupabaseBlogPost> for BlogPost {
     }
 }
 
-/// Fetch all published blog posts from Supabase
-pub async fn fetch_blog_posts() -> Result<Vec<BlogPost>, Box<dyn std::error::Error>> {
-    #[cfg(target_arch = "wasm32")]
-    {
-        use crate::api::env::{APP_PUBLIC_SUPABASE_URL, APP_PUBLIC_SUPABASE_ANON_KEY};
-        use gloo::net::http::Request;
-        
-        // Debug logging
-        gloo::console::log!("Supabase URL:", &*APP_PUBLIC_SUPABASE_URL);
-        gloo::console::log!("Supabase Key (first 10 chars):", &APP_PUBLIC_SUPABASE_ANON_KEY[..std::cmp::min(10, APP_PUBLIC_SUPABASE_ANON_KEY.len())]);
-        
-        let url = format!(
-            "{}/rest/v1/blog_posts?is_published=eq.true&order=published_at.desc",
-            *APP_PUBLIC_SUPABASE_URL
-        );
-        
-        gloo::console::log!("Making request to:", &url);
-        
-        let response = Request::get(&url)
-            .header("Authorization", &format!("Bearer {}", *APP_PUBLIC_SUPABASE_ANON_KEY))
-            .header("apikey", &*APP_PUBLIC_SUPABASE_ANON_KEY)
-            .header("Content-Type", "application/json")
-            .header("Accept", "application/json")
-            .header("Prefer", "return=representation")
-            .send()
-            .await?;
-        
-        gloo::console::log!("Response status:", response.status());
-        
-        if !response.ok() {
-            let error_text = response.text().await.unwrap_or_else(|_| "Unknown error".to_string());
-            gloo::console::error!("Error response:", &error_text);
-            return Err(format!("Failed to fetch blog posts: {} (status: {})", error_text, response.status()).into());
-        }
-        
-        let supabase_posts: Vec<SupabaseBlogPost> = response.json().await?;
-        let blog_posts: Vec<BlogPost> = supabase_posts.into_iter().map(|p| p.into()).collect();
-        
-        Ok(blog_posts)
-    }
-    
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        // For server-side, return empty for now
-        Ok(vec![])
-    }
-}
-
-/// Fetch a single blog post by slug from Supabase
-#[allow(dead_code)]
-pub async fn fetch_blog_post_by_slug(_slug: &str) -> Result<Option<BlogPost>, Box<dyn std::error::Error>> {
-    #[cfg(target_arch = "wasm32")]
-    {
-        use crate::api::env::{APP_PUBLIC_SUPABASE_URL, APP_PUBLIC_SUPABASE_ANON_KEY};
-        use gloo::net::http::Request;
-        
-        let url = format!(
-            "{}/rest/v1/blog_posts?slug=eq.{}&is_published=eq.true&limit=1",
-            *APP_PUBLIC_SUPABASE_URL,
-            _slug
-        );
-        
-        let response = Request::get(&url)
-            .header("Authorization", &format!("Bearer {}", *APP_PUBLIC_SUPABASE_ANON_KEY))
-            .header("apikey", &*APP_PUBLIC_SUPABASE_ANON_KEY)
-            .header("Content-Type", "application/json")
-            .header("Accept", "application/json")
-            .header("Prefer", "return=representation")
-            .send()
-            .await?;
-        
-        if !response.ok() {
-            let error_text = response.text().await.unwrap_or_else(|_| "Unknown error".to_string());
-            return Err(format!("Failed to fetch blog post: {} (status: {})", error_text, response.status()).into());
-        }
-        
-        let mut supabase_posts: Vec<SupabaseBlogPost> = response.json().await?;
-        
-        if let Some(supabase_post) = supabase_posts.pop() {
-            Ok(Some(supabase_post.into()))
-        } else {
-            Ok(None)
-        }
-    }
-    
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        // For server-side, return None for now
-        Ok(None)
-    }
-}
-
-
 
 
 #[server(name = GetBlog)]
@@ -219,6 +126,82 @@ pub async fn get_blog() -> Result<Vec<BlogPost>, ServerFnError> {
                     let error_msg = format!("Failed to fetch blog posts. Status: {}, Response: {}", status, text);
                     info!("{}", error_msg);
                     Err(ServerFnError::new(error_msg))
+                }
+            }
+            Err(e) => {
+                let error_msg = format!("Request failed: {}", e);
+                info!("{}", error_msg);
+                Err(ServerFnError::new(error_msg))
+            }
+        }
+    }
+    #[cfg(target_arch = "wasm32")]
+    {
+        Err(ServerFnError::new("Server function called on client side".to_string()))
+    }
+}
+
+
+
+#[server(name = GetBlogWithSlug)]
+pub async fn get_blog_with_slug(slug: String) -> Result<BlogPost, ServerFnError> {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        use crate::api::auth::create_server_client;
+        use tracing::info;
+
+        info!("Fetching blog post with slug '{}' from Supabase...", slug);
+        
+        let client = create_server_client();
+
+        // Query specific blog post by slug
+        let resp = client
+            .table("blog_posts")
+            .select("id,title,content,author,created_at,slug,excerpt,tags,cover_image,published_at,updated_at")
+            .eq("slug", &slug)
+            .eq("is_published", "true") // Only fetch published posts
+            .single() // Use single() to get one result instead of an array
+            .execute()
+            .await;
+            
+        match resp {
+            Ok(response) => {
+                let status = response.status();
+                
+                if status.is_success() {
+                    let text = response.text().await.map_err(|e| ServerFnError::new(e.to_string()))?;
+                    info!("Raw Supabase response: {}", text);
+
+                    // Parse the JSON response into our SupabaseBlogPost struct first
+                    match serde_json::from_str::<SupabaseBlogPost>(&text) {
+                        Ok(supabase_post) => {
+                            info!("Successfully parsed blog post: '{}'", supabase_post.title);
+                            let blog_post: BlogPost = supabase_post.into();
+                            Ok(blog_post)
+                        }
+                        Err(parse_error) => {
+                            info!("JSON parsing failed: {}", parse_error);
+                            info!("Attempting to parse as serde_json::Value for debugging...");
+                            
+                            match serde_json::from_str::<serde_json::Value>(&text) {
+                                Ok(value) => {
+                                    info!("Raw JSON structure: {:#}", value);
+                                }
+                                Err(_) => info!("Response is not valid JSON at all")
+                            }
+
+                            Err(ServerFnError::new(format!("Failed to parse blog post JSON: {}", parse_error)))
+                        }
+                    }
+                } else {
+                    let text = response.text().await.map_err(|e| ServerFnError::new(e.to_string()))?;
+                    let error_msg = format!("Failed to fetch blog post. Status: {}, Response: {}", status, text);
+                    info!("{}", error_msg);
+                    if status.as_u16() == 404 {
+                        Err(ServerFnError::new(format!("Blog post with slug '{}' not found", slug)))
+                    } else {
+                        Err(ServerFnError::new(error_msg))
+                    }
                 }
             }
             Err(e) => {

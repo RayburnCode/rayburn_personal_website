@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use crate::api::get_blog;
 use crate::Route;
-use crate::api::blog::{fetch_blog_posts, BlogPost};
+use crate::api::blog::BlogPost;
 
 /// The Blog page component
 #[component]

@@ -1,24 +1,6 @@
 use dioxus::prelude::*;
-use dioxus_router::prelude::*;
-use serde::{Deserialize, Serialize};
+use crate::api::{get_blog_with_slug, BlogPost};
 use crate::Route;
-use crate::views::Blog;
-
-
-// 1. Define your blog post structure
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct BlogPost {
-    id: i32,
-    title: String,
-    slug: String,
-    content: String,
-    excerpt: String,
-    published_at: String,
-    updated_at: Option<String>,
-    tags: Vec<String>,
-    cover_image: Option<String>,
-    author: String,
-}
 
 // 2. Blog Post Detail Component
 #[component]
@@ -33,49 +15,20 @@ pub fn BlogPostDetail(slug: String) -> Element {
         let mut loading = loading.clone();
         let mut error = error.clone();
         let slug = slug.clone();
+        
         wasm_bindgen_futures::spawn_local(async move {
             loading.set(true);
             error.set(None);
-
-            // Simulate API call - replace with actual Supabase fetch
-            // Example real implementation:
-            /*
-            let client = supabase_rs::new(SUPABASE_URL, SUPABASE_KEY);
-            let response = client.from("posts")
-                .select("*")
-                .eq("slug", slug)
-                .single()
-                .execute()
-                .await;
-
-            match response {
-                Ok(post) => {
-                    post.set(Some(post));
-                    loading.set(false);
+            
+            match get_blog_with_slug(slug).await {
+                Ok(blog_post) => {
+                    post.set(Some(blog_post));
                 }
-                Err(e) => {
-                    error.set(Some(format!("Failed to load post: {}", e)));
-                    loading.set(false);
+                Err(err) => {
+                    error.set(Some(format!("Failed to load blog post: {}", err)));
                 }
             }
-            */
-
-            // Mock data for demonstration
-
-            let mock_post = BlogPost {
-                id: 1,
-                slug: slug.clone(),
-                title: "Combining Finance and Technology".to_string(),
-                content: markdown_content(),
-                excerpt: "How I bridge my financial expertise with my passion for coding...".to_string(),
-                published_at: "2023-10-15".to_string(),
-                updated_at: Some("2023-10-20".to_string()),
-                tags: vec!["Finance".to_string(), "Tech".to_string(), "Career".to_string()],
-                cover_image: Some("/images/blog-finance-tech.jpg".to_string()),
-                author: "Dylan".to_string(),
-            };
-
-            post.set(Some(mock_post));
+            
             loading.set(false);
         });
     });
@@ -241,53 +194,3 @@ pub fn BlogPostDetail(slug: String) -> Element {
     }
 }
 
-// Helper function for mock markdown content
-fn markdown_content() -> String {
-    r#"
-## Bridging Two Worlds
-
-For the past six years, I've worked in the mortgage and finance industry while simultaneously cultivating my passion for technology. This unique combination has given me a perspective that few possess.
-
-### Financial Expertise Meets Technical Skills
-
-My experience in credit analysis has taught me to:
-- Analyze complex financial statements
-- Assess risk factors
-- Understand regulatory requirements
-
-Meanwhile, my coding skills allow me to:
-- Automate repetitive tasks
-- Build custom financial tools
-- Visualize data more effectively
-
-### Practical Applications
-
-Here are some examples of how I've combined these skills:
-
-1. **Automated Spreadsheet Analysis**  
-   Created Python scripts that parse Excel financials and flag potential issues.
-
-2. **Custom Mortgage Calculators**  
-   Built web-based calculators that help clients understand different scenarios.
-
-3. **Document Processing Pipeline**  
-   Developed a system that extracts key data from loan documents using OCR.
-
-### The Future of FinTech
-
-I believe the intersection of finance and technology will only grow more important. By understanding both domains, I'm positioned to:
-- Help traditional financial institutions modernize
-- Contribute to innovative FinTech solutions
-- Bridge the communication gap between technical and financial teams
-
-### Getting Started
-
-If you're a finance professional looking to add technical skills (or vice versa), I recommend:
-- Starting with basic Python or JavaScript
-- Learning how APIs work in financial systems
-- Exploring automation opportunities in your current workflow
-
-"#.to_string()
-}
-
-// 3. Update your Route enum to include the blog post detail route
