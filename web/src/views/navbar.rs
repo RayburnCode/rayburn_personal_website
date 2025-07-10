@@ -9,14 +9,14 @@ pub fn Navbar(children: Element) -> Element {
     // Helper function to determine active class
     fn active_class(route: &Route, current_route: &Route, class: &str) -> String {
         if route == current_route {
-            format!("{} text-blue-600 font-medium border-b-2 border-blue-600", class)
+            format!("{} text-CustomHover font-medium border-b-2 border-CustomHover", class)
         } else {
             class.to_string()
         }
     }
 
     rsx! {
-        nav { class: "sticky  top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm",
+        nav { class: "sticky  top-0 z-50 w-full  text-CustomAccent bg-CustomNav backdrop-blur-md border-b border-gray-200 shadow-sm",
             div { class: "px-4  sm:px-6 lg:px-8",
                 div { class: "flex  h-16 items-center justify-between",
 
@@ -28,7 +28,7 @@ pub fn Navbar(children: Element) -> Element {
                             class: active_class(
                                 &Route::Home {},
                                 &current_route,
-                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
+                                "text-CustomAccent hover:text-CustomAccentDarker px-1 py-2 text-sm font-medium transition-colors",
                             ),
                             "Home"
                         }
@@ -37,7 +37,7 @@ pub fn Navbar(children: Element) -> Element {
                             class: active_class(
                                 &Route::About {},
                                 &current_route,
-                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
+                                "text-CustomAccent hover:text-CustomAccentDarker px-1 py-2 text-sm font-medium transition-colors",
                             ),
                             "About"
                         }
@@ -46,13 +46,18 @@ pub fn Navbar(children: Element) -> Element {
                             class: active_class(
                                 &Route::Projects {},
                                 &current_route,
-                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
+                                "text-CustomAccent hover:text-CustomAccentDarker px-1 py-2 text-sm font-medium transition-colors",
                             ),
                             "Projects"
                         }
+
                         Link {
                             to: Route::Blog {},
-                            class: if matches!(current_route, Route::Blog { .. }) { "text-blue-600 font-medium border-b-2 border-blue-600 px-1 py-2 text-sm transition-colors" } else { "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors" },
+                            class: active_class(
+                                &Route::Blog {},
+                                &current_route,
+                                "text-CustomAccent hover:text-CustomAccentDarker px-1 py-2 text-sm font-medium transition-colors",
+                            ),
                             "Blog"
                         }
                         Link {
@@ -60,19 +65,9 @@ pub fn Navbar(children: Element) -> Element {
                             class: active_class(
                                 &Route::Resume {},
                                 &current_route,
-                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
+                                "text-CustomAccent hover:text-CustomAccentDarker px-1 py-2 text-sm font-medium transition-colors",
                             ),
                             "Resume"
-                        }
-
-                        Link {
-                            to: Route::Login {},
-                            class: active_class(
-                                &Route::Login {},
-                                &current_route,
-                                "text-gray-600 hover:text-blue-600 px-1 py-2 text-sm font-medium transition-colors",
-                            ),
-                            "Login"
                         }
                     }
 
@@ -80,7 +75,7 @@ pub fn Navbar(children: Element) -> Element {
 
                     Link {
                         to: Route::Contact {},
-                        class: if matches!(current_route, Route::Contact {}) { "ml-4 rounded-md bg-BurntSienna-Darker px-4 py-2 text-sm font-medium text-white shadow focus:outline-none transition-colors" } else { "ml-4 rounded-md bg-BurntSienna px-4 py-2 text-sm font-medium text-white shadow hover:bg-BurntSienna-Darker focus:outline-none transition-colors" },
+                        class: if matches!(current_route, Route::Contact {}) { "ml-4 rounded-md bg-CustomHover px-4 py-2 text-sm font-medium text-CustomBackground shadow focus:outline-none transition-colors" } else { "ml-4 rounded-md bg-CustomHover px-4 py-2 text-sm font-medium text-CustomBackground shadow hover:bg-CustomHoverDarker focus:outline-none transition-colors" },
                         "Contact Me"
                     }
                 }

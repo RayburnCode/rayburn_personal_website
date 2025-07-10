@@ -6,16 +6,6 @@
   --font-mainName: "Lora", "sans-serif";
   --font-display: "Montserrat", "sans-serif";
 
-  --color-customGreen-400: oklch(0.81 0.085 134.05);
-  --color-customGreen-500: oklch(0.76 0.0851 134.48);
-  --color-customGreen-600: oklch(0.7 0.0808 133.19);
-
-  /* Custom Colors Per Project*/
-  --color-primary: oklch(0.76 0.0851 134.48);
-  --color-secondary: oklch(0.94 0.0158 154.46);
-  --color-accent: oklch(0.96 0.0175 73.08);
-  --color-muted: oklch(0.99 0.0062 75.41);
-
   /* Cool and Collected Color Scheme*/
   --color-DarkCyan: oklch(0.2854 0.0486 203.48);
   --color-DeepTeal: oklch(0.3705 0.0626 205.92);
@@ -23,8 +13,13 @@
   --color-BurntSienna-Darker: oklch(0.4436 0.111 34.72);
   --color-VividCerulean: oklch(0.6558 0.1097 203.42);
   --color-CrystalBlue: oklch(0.8706 0.0362 201.04);
-  --color-CustomText: oklch(0.9702 0 0);
 
-  --color-CustomBackground: oklch(0.9419 0.0384 76.19);
-  --color-CustomAccent: oklch(0.4892 0.0792 34.87);
+  --color-CustomText: oklch(0.9702 0 0);
+  --color-CustomBackground: oklch(0.3191 0.0141 166.83);
+  --color-CustomAccent: oklch(0.9124 0.0256 178.33);
+  --color-CustomAccentDarker: oklch(0.8056 0.0256 178.33);
+  --color-CustomNav: oklch(0.4588 0.0732 197.45);
+  --color-CustomHover: oklch(0.8766 0.086755 64.6051);
+  --color-CustomHover: oklch(0.8766 0.086755 64.6051);
+  --color-CustomHoverDarker: oklch(0.7851 0.0682 62.86);
 }

@@ -87,7 +87,7 @@ pub fn Contact() -> Element {
     };
 
     rsx! {
-        div { class: "max-w-2xl mx-auto p-6 text-gray-800 dark:text-gray-200",
+        div { class: "max-w-2xl mx-auto p-6 dark:text-gray-200",
             h1 { class: "text-3xl font-bold mb-6", "Get in Touch" }
             p { class: "mb-6",
                 "Have questions about mortgages and finance? Want to discuss a coding project or 3D printing idea? I'd love to hear from you! Fill out the form below or connect with me directly through my GitHub."

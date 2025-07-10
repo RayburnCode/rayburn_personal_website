@@ -26,8 +26,6 @@ mod layout;
 pub use layout::AppLayout;
 mod login;
 pub use login::Login;
-
-
 pub mod protected;
 pub use protected::Protected;
 pub mod callback;

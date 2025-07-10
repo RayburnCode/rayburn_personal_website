@@ -47,7 +47,7 @@ pub fn Home() -> Element {
     rsx! {
         div { class: "min-h-screen  flex flex-col",
             // Hero Section
-            div { class: "flex-1 flex flex-col justify-center items-center text-center px-6 py-20 sm:py-24 lg:py-32",
+            div { class: "flex-1 flex flex-col justify-center items-center text-center px-6 py-10 sm:py-24 lg:py-20",
                 // Name/Title
                 div { class: "max-w-3xl space-y-6",
                     h1 { class: "text-4xl sm:text-5xl lg:text-6xl font-light  tracking-tight",
@@ -64,7 +64,7 @@ pub fn Home() -> Element {
                     alt: "Dylan Rayburn",
                 }
                 // Divider
-                div { class: "my-8 w-16 h-px bg-gray-300" }
+                div { class: "my-6 w-16 h-px bg-gray-300" }
                 // Short Bio
                 p { class: "max-w-2xl text-lg  leading-relaxed",
                     "I build solutions at the intersection of technology and finance. 

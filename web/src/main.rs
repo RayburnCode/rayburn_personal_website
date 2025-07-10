@@ -14,7 +14,6 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 
-
 fn main() {
     dioxus::logger::initialize_default();
 
