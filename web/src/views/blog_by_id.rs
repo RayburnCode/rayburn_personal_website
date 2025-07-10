@@ -34,7 +34,7 @@ pub fn BlogPostDetail(slug: String) -> Element {
     });
 
     rsx! {
-        div { class: "max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12",
+        div { class: "max-w-6xl mx-auto py-8",
             // Loading state
             if *loading.read() {
                 div { class: "flex justify-center py-12",

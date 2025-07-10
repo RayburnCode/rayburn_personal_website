@@ -81,82 +81,75 @@ pub fn Blog() -> Element {
     });
 
     rsx! {
-        div { class: "min-h-screen  dark:bg-gray-900",
-            div { class: "max-w-6xl mx-auto p-6",
-                // Hero section
-                div { class: "text-center py-6 mb-6",
-                    h1 { class: "text-5xl font-bold text-CustomAccent dark:text-white mb-6",
-                        "Blog"
-                    }
-                    p { class: "text-xl text-CustomAccent dark:text-gray-300 max-w-3xl mx-auto leading-relaxed",
-                        "Exploring the intersection of finance, technology, and innovation. Sharing insights from my journey as a developer, 3D printing enthusiast, and financial professional."
+        div { class: "max-w-6xl mx-auto",
+            // Hero section
+            div { class: "py-12 mb-12",
+                h1 { class: "text-3xl sm:text-4xl font-bold mb-8", "Blog" }
+                p { class: "mb-12 text-lg leading-relaxed",
+                    "Exploring the intersection of finance, technology, and innovation. Sharing insights from my journey as a developer, 3D printing enthusiast, and financial professional."
+                }
+            }
+            // Loading state
+            if *loading.read() {
+                div { class: "flex justify-center py-20",
+                    div { class: "flex flex-col items-center",
+                        div { class: "animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 dark:border-indigo-400" }
+                        p { class: "mt-4 text-gray-600 dark:text-gray-400", "Loading blog posts..." }
                     }
                 }
-                // Loading state
-                if *loading.read() {
-                    div { class: "flex justify-center py-20",
-                        div { class: "flex flex-col items-center",
-                            div { class: "animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 dark:border-indigo-400" }
-                            p { class: "mt-4 text-gray-600 dark:text-gray-400",
-                                "Loading blog posts..."
+            }
+            // Error state
+            if let Some(err) = error.read().as_ref() {
+                div { class: "p-6 mb-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 rounded-lg",
+                    div { class: "flex items-center",
+                        svg {
+                            class: "w-5 h-5 mr-2",
+                            fill: "currentColor",
+                            view_box: "0 0 20 20",
+                            path {
+                                fill_rule: "evenodd",
+                                d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z",
+                                clip_rule: "evenodd",
+                            }
+                        }
+                        strong { "Error loading posts: " }
+                        "{err}"
+                    }
+                }
+            }
+            // Blog posts list
+            if posts.read().is_empty() && !*loading.read() {
+                div { class: "text-center py-20",
+                    div { class: "mb-4",
+                        svg {
+                            class: "mx-auto h-16 w-16 text-gray-400 dark:text-gray-600",
+                            fill: "none",
+                            stroke: "currentColor",
+                            view_box: "0 0 24 24",
+                            path {
+                                stroke_linecap: "round",
+                                stroke_linejoin: "round",
+                                stroke_width: "2",
+                                d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
                             }
                         }
                     }
-                }
-                // Error state
-                if let Some(err) = error.read().as_ref() {
-                    div { class: "p-6 mb-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 rounded-lg",
-                        div { class: "flex items-center",
-                            svg {
-                                class: "w-5 h-5 mr-2",
-                                fill: "currentColor",
-                                view_box: "0 0 20 20",
-                                path {
-                                    fill_rule: "evenodd",
-                                    d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z",
-                                    clip_rule: "evenodd",
-                                }
-                            }
-                            strong { "Error loading posts: " }
-                            "{err}"
-                        }
+                    h3 { class: "text-lg font-medium text-gray-900 dark:text-white mb-2",
+                        "No blog posts found"
                     }
+                    p { class: "text-gray-500 dark:text-gray-400", "Check back soon for new content!" }
                 }
-                // Blog posts list
-                if posts.read().is_empty() && !*loading.read() {
-                    div { class: "text-center py-20",
-                        div { class: "mb-4",
-                            svg {
-                                class: "mx-auto h-16 w-16 text-gray-400 dark:text-gray-600",
-                                fill: "none",
-                                stroke: "currentColor",
-                                view_box: "0 0 24 24",
-                                path {
-                                    stroke_linecap: "round",
-                                    stroke_linejoin: "round",
-                                    stroke_width: "2",
-                                    d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
-                                }
-                            }
-                        }
-                        h3 { class: "text-lg font-medium text-gray-900 dark:text-white mb-2",
-                            "No blog posts found"
-                        }
-                        p { class: "text-gray-500 dark:text-gray-400",
-                            "Check back soon for new content!"
-                        }
-                    }
-                } else {
-                    div { class: "grid gap-8 md:grid-cols-2 lg:grid-cols-3",
-                        for post in posts.read().iter() {
-                            BlogPostCard { post: post.clone() }
-                        }
+            } else {
+                div { class: "grid gap-8 md:grid-cols-2 lg:grid-cols-3",
+                    for post in posts.read().iter() {
+                        BlogPostCard { post: post.clone() }
                     }
                 }
             }
         }
     }
-}
+    }
+
 
 /// Individual blog post card component
 #[component]

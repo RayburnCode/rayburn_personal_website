@@ -3,19 +3,19 @@ use dioxus::prelude::*;
 #[component]
 pub fn Resume() -> Element {
     rsx! {
-        div { class: "max-w-4xl mx-auto p-6",
+        div { class: "max-w-6xl mx-auto",
             // Experience Section
-            section { class: "mb-8",
-                h2 { class: "text-2xl font-bold mb-4 border-b border-gray-300 dark:border-gray-600 pb-2",
+            section { class: "mb-12",
+                h2 { class: "text-2xl sm:text-3xl font-bold mb-8 border-b border-gray-300 dark:border-gray-600 pb-2",
                     "EXPERIENCE"
                 }
                 // Everyone's Processing Company
-                div { class: "mb-6",
+                div { class: "mb-8",
                     h4 { class: "text-xl font-semibold",
                         "Everyone's Processing Company, Glendale, CA - Mortgage Loan Processor"
                     }
-                    p { class: "italic  mb-2", "April 2024 - Present" }
-                    ul { class: "list-disc pl-6 space-y-1",
+                    p { class: "italic mb-4", "April 2024 - Present" }
+                    ul { class: "list-disc pl-6 space-y-2",
                         li {
                             "Review and process residential mortgage loan applications, ensuring strict compliance with lender guidelines and regulatory requirements throughout the entire loan lifecycle from submission to final approval."
                         }
@@ -29,12 +29,12 @@ pub fn Resume() -> Element {
                 }
 
                 // California Bank & Trust
-                div { class: "mb-6",
+                div { class: "mb-8",
                     h4 { class: "text-xl font-semibold",
                         "California Bank & Trust, San Diego, CA - Credit Analyst"
                     }
-                    p { class: "italic mb-2", "July 2022 - Present" }
-                    ul { class: "list-disc pl-6 space-y-1",
+                    p { class: "italic mb-4", "July 2022 - Present" }
+                    ul { class: "list-disc pl-6 space-y-2",
                         li {
                             "Collaborated closely with Regional Managers to address any covenant-related issues, providing guidance and assistance in finding appropriate solutions."
                         }
@@ -47,15 +47,15 @@ pub fn Resume() -> Element {
                     }
                 }
                 // Global Equity Finance
-                div { class: "mb-6",
+                div { class: "mb-8",
                     h4 { class: "text-xl font-semibold",
                         "Global Equity Finance, San Diego, CA - Various roles"
                     }
-                    p { class: "italic mb-2", "May 2020 - July 2022" }
-                    ol { class: "list-decimal pl-6 space-y-4",
+                    p { class: "italic mb-4", "May 2020 - July 2022" }
+                    ol { class: "list-decimal pl-6 space-y-6",
                         li {
                             h5 { class: "font-semibold", "Senior Credit Analyst" }
-                            ul { class: "list-disc pl-6 mt-1 space-y-1",
+                            ul { class: "list-disc pl-6 mt-2 space-y-2",
                                 li {
                                     "Worked with loan officers and processors to ensure loan file moves from initial submission through funding."
                                 }
@@ -67,7 +67,7 @@ pub fn Resume() -> Element {
                         }
                         li {
                             h5 { class: "font-semibold", "Mortgage Loan Originator" }
-                            ul { class: "list-disc pl-6 mt-1 space-y-1",
+                            ul { class: "list-disc pl-6 mt-2 space-y-2",
                                 li {
                                     "Assist clients with initial loan applications that directly optimize their financial needs."
                                 }
@@ -79,12 +79,12 @@ pub fn Resume() -> Element {
                     }
                 }
                 // Lincoln Finance Company
-                div { class: "mb-6",
+                div { class: "mb-8",
                     h4 { class: "text-xl font-semibold",
                         "Lincoln Finance Company, San Diego, CA — Collections Administrator"
                     }
-                    p { class: "italic mb-2", "June 2018 - May 2020" }
-                    ul { class: "list-disc pl-6 space-y-1",
+                    p { class: "italic mb-4", "June 2018 - May 2020" }
+                    ul { class: "list-disc pl-6 space-y-2",
                         li {
                             "Maintenance and upkeep with commercial line of credit. Tasks including leading preparation for audits, producing monthly financial reports, and preparing borrowing base reporting. Creating Excel Macros for efficiency."
                         }
@@ -94,10 +94,10 @@ pub fn Resume() -> Element {
                     }
                 }
             }
-            hr { class: "my-6 border-gray-300 dark:border-gray-600" }
+            hr { class: "my-8 border-gray-300 dark:border-gray-600" }
             // Education Section
-            section { class: "mb-8",
-                h2 { class: "text-2xl font-bold mb-4 border-b border-gray-300 dark:border-gray-600 pb-2",
+            section { class: "mb-12",
+                h2 { class: "text-2xl sm:text-3xl font-bold mb-8 border-b border-gray-300 dark:border-gray-600 pb-2",
                     "EDUCATION"
                 }
                 div { class: "mb-4",

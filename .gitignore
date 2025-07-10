@@ -12,3 +12,14 @@ node_modules
 .env.local
 *.env
 
+
+
+
+BLOG_SETUP.md
+BLOG_SUPABASE_SETUP.md
+CONTACT_FORM_SEUTUP.md
+setup_rls_policies.sql
+
+migrations
+
+supabase.rs

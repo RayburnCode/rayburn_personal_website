@@ -33,10 +33,10 @@ pub fn Projects() -> Element {
     let printing_projects = projects().into_iter().filter(|p| p.category == "3d-printing").collect::<Vec<_>>();
 
     rsx! {
-        div { class: "max-w-6xl mx-auto p-6",
-            h1 { class: "text-3xl font-bold mb-8", "My Projects" }
+        div { class: "max-w-6xl mx-auto",
+            h1 { class: "text-3xl sm:text-4xl font-bold mb-8", "My Projects" }
             // Introduction
-            p { class: "mb-8 text-lg",
+            p { class: "mb-12 text-lg",
                 "Here's a collection of my work spanning web development, financial tools, and 3D printing projects. Each represents my passion for combining technology with practical solutions."
             }
 
@@ -58,11 +58,11 @@ pub fn Projects() -> Element {
 
             // Web Development Projects
             if !loading() && !web_projects.is_empty() {
-                section { class: "mb-12",
-                    h2 { class: "text-2xl font-bold mb-6 pb-2 border-b border-gray-300 dark:border-gray-600",
+                section { class: "mb-16",
+                    h2 { class: "text-2xl sm:text-3xl font-bold mb-8 pb-2 border-b border-gray-300 dark:border-gray-600",
                         "Web Development"
                     }
-                    div { class: "grid grid-cols-1 md:grid-cols-2 gap-6",
+                    div { class: "grid grid-cols-1 md:grid-cols-2 gap-8",
                         for project in web_projects.iter() {
                             ProjectCard { project: project.clone() }
                         }
@@ -72,11 +72,11 @@ pub fn Projects() -> Element {
 
             // 3D Printing Projects
             if !loading() && !printing_projects.is_empty() {
-                section { class: "mb-12",
-                    h2 { class: "text-2xl font-bold mb-6 pb-2 border-b border-gray-300 dark:border-gray-600",
+                section { class: "mb-16",
+                    h2 { class: "text-2xl sm:text-3xl font-bold mb-8 pb-2 border-b border-gray-300 dark:border-gray-600",
                         "3D Printing & CAD Designs"
                     }
-                    div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                    div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
                         for project in printing_projects.iter() {
                             ProjectCard3D { project: project.clone() }
                         }
