@@ -42,6 +42,11 @@ dx serve --platform desktop
 dx bundle --platform web
 ```
 
-```
+```bash
 cargo build
+```
+
+```bash
+  window.__DXS_HYDRATION = "BASE64_ENCODED_DATA_HERE"; // Must exist!
+
 ```

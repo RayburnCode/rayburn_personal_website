@@ -4,7 +4,9 @@
 
 # HTML title tag content
 title = "Portfolio"
-base_path = "rayburn_personal_website"  # Comment out for local development
+hydrate = false      # Enable if using SSR/interactivity
+platform = "web" # Explicitly set platform
+
 # include `assets` in web platform
 [web.resource]
 
