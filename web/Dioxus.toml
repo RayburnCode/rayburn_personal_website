@@ -4,7 +4,7 @@
 
 # HTML title tag content
 title = "Portfolio"
-base_path = "rayburn_personal_website"
+# base_path = "rayburn_personal_website"  # Comment out for local development
 # include `assets` in web platform
 [web.resource]
 

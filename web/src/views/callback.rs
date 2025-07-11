@@ -1,8 +1,11 @@
+#[allow(unused_imports)]
 use crate::api::auth::set_session;
+#[allow(unused_imports)]
 use crate::views::Protected;
 use dioxus::prelude::*;
 use crate::Route;
 use std::collections::HashMap;
+#[cfg(target_arch = "wasm32")]
 use web_sys::window;
 
 #[component]

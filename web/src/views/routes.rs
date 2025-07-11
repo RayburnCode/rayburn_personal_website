@@ -59,7 +59,7 @@ where
 {
     spawn(async move {
         let user = get_user().await;
-        if user.is_err() {
+        if user.is_none() {
             f(());
         }
     });
@@ -69,7 +69,7 @@ where
 pub fn protected(redirect: Route, next: Route) {
     spawn(async move {
         let user = get_user().await;
-        if user.is_err() {
+        if user.is_none() {
             GuardContext::set_next(next);
             let nav = navigator();
             nav.replace(redirect);

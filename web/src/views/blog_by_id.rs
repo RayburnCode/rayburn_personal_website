@@ -16,21 +16,31 @@ pub fn BlogPostDetail(slug: String) -> Element {
         let mut error = error.clone();
         let slug = slug.clone();
         
-        wasm_bindgen_futures::spawn_local(async move {
-            loading.set(true);
-            error.set(None);
-            
-            match get_blog_with_slug(slug).await {
-                Ok(blog_post) => {
-                    post.set(Some(blog_post));
+        #[cfg(target_arch = "wasm32")]
+        {
+            wasm_bindgen_futures::spawn_local(async move {
+                loading.set(true);
+                error.set(None);
+                
+                match get_blog_with_slug(slug).await {
+                    Ok(blog_post) => {
+                        post.set(Some(blog_post));
+                    }
+                    Err(err) => {
+                        error.set(Some(format!("Failed to load blog post: {}", err)));
+                    }
                 }
-                Err(err) => {
-                    error.set(Some(format!("Failed to load blog post: {}", err)));
-                }
-            }
-            
+                
+                loading.set(false);
+            });
+        }
+        
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            // For non-WASM builds, just set an error message
+            error.set(Some("Blog detail view not available in non-WASM builds".to_string()));
             loading.set(false);
-        });
+        }
     });
 
     rsx! {
@@ -153,8 +163,11 @@ pub fn BlogPostDetail(slug: String) -> Element {
                             // Back to top
                             button {
                                 onclick: move |_| {
-                                    if let Some(window) = web_sys::window() {
-                                        window.scroll_to_with_x_and_y(0.0, 0.0);
+                                    #[cfg(target_arch = "wasm32")]
+                                    {
+                                        if let Some(window) = web_sys::window() {
+                                            window.scroll_to_with_x_and_y(0.0, 0.0);
+                                        }
                                     }
                                 },
                                 class: "text-CustomHover cursor-pointer dark:text-blue-400 hover:underline flex items-center",

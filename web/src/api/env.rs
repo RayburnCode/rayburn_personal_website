@@ -3,9 +3,9 @@ use lazy_static::lazy_static;
 
 #[derive(Deserialize, Debug)]
 pub struct EnvConfig {
-    pub app_public_id: String,
-    pub app_public_supabase_url: String,
-    pub app_public_supabase_anon_key: String,
+    pub supabase_project_id: String,
+    pub supabase_url: String,
+    pub supabase_anon_key: String,
 }
 
 impl EnvConfig {
@@ -21,9 +21,9 @@ impl EnvConfig {
         {
             // For WASM, use compile-time environment variables set by build.rs
             EnvConfig {
-                app_public_id: env!("APP_PUBLIC_ID").to_string(),
-                app_public_supabase_url: env!("APP_PUBLIC_SUPABASE_URL").to_string(),
-                app_public_supabase_anon_key: env!("APP_PUBLIC_SUPABASE_ANON_KEY").to_string(),
+                supabase_project_id: env!("APP_PUBLIC_ID").to_string(),
+                supabase_url: env!("APP_PUBLIC_SUPABASE_URL").to_string(),
+                supabase_anon_key: env!("APP_PUBLIC_SUPABASE_ANON_KEY").to_string(),
             }
         }
     }
@@ -31,7 +31,11 @@ impl EnvConfig {
 
 lazy_static::lazy_static! {
     static ref ENV_CONFIG: EnvConfig = EnvConfig::load();
-    pub static ref APP_PUBLIC_ID: String = ENV_CONFIG.app_public_id.clone();
-    pub static ref APP_PUBLIC_SUPABASE_URL: String = ENV_CONFIG.app_public_supabase_url.clone();
-    pub static ref APP_PUBLIC_SUPABASE_ANON_KEY: String = ENV_CONFIG.app_public_supabase_anon_key.clone();
+    pub static ref APP_PUBLIC_ID: String = ENV_CONFIG.supabase_project_id.clone();
+    pub static ref APP_PUBLIC_SUPABASE_URL: String = ENV_CONFIG.supabase_url.clone();
+    pub static ref APP_PUBLIC_SUPABASE_ANON_KEY: String = ENV_CONFIG.supabase_anon_key.clone();
+}
+
+pub fn get_env_config() -> &'static EnvConfig {
+    &ENV_CONFIG
 }

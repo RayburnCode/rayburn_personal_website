@@ -14,18 +14,26 @@ pub fn Blog() -> Element {
     use_effect(move || {
         // Try to fetch from Supabase in a separate future
         spawn(async move {
+            #[cfg(target_arch = "wasm32")]
             gloo::console::log!("Starting blog post fetch...");
+            
             match get_blog().await {
                 Ok(fetched_posts) => {
+                    #[cfg(target_arch = "wasm32")]
                     gloo::console::log!("Fetch successful! Posts count:", fetched_posts.len());
+                    
                     if !fetched_posts.is_empty() {
+                        #[cfg(target_arch = "wasm32")]
                         gloo::console::log!("Successfully fetched", fetched_posts.len(), "blog posts from Supabase");
                         posts.set(fetched_posts);
                     } else {
-                        gloo::console::log!("No posts found in Supabase - this likely means:");
-                        gloo::console::log!("1. No data in your Supabase blog_posts table");
-                        gloo::console::log!("2. Environment variables not set correctly");
-                        gloo::console::log!("3. Table doesn't exist or RLS policies blocking access");
+                        #[cfg(target_arch = "wasm32")]
+                        {
+                            gloo::console::log!("No posts found in Supabase - this likely means:");
+                            gloo::console::log!("1. No data in your Supabase blog_posts table");
+                            gloo::console::log!("2. Environment variables not set correctly");
+                            gloo::console::log!("3. Table doesn't exist or RLS policies blocking access");
+                        }
                         
                         // Set some temporary mock data since Supabase is empty
                         let mock_posts = vec![
@@ -47,13 +55,16 @@ pub fn Blog() -> Element {
                     }
                 }
                 Err(e) => {
-                    gloo::console::error!("Failed to fetch from Supabase:", e.to_string());
-                    gloo::console::log!("This likely means:");
-                    gloo::console::log!("1. Supabase URL/Key not set (check environment variables)");
-                    gloo::console::log!("2. Network connectivity issue");
-                    gloo::console::log!("3. CORS or authentication problems");
-                    gloo::console::log!("4. 406 error usually means missing Accept headers or wrong content type");
-                    gloo::console::log!("5. Table 'blog_posts' doesn't exist in your Supabase database");
+                    #[cfg(target_arch = "wasm32")]
+                    {
+                        gloo::console::error!("Failed to fetch from Supabase:", e.to_string());
+                        gloo::console::log!("This likely means:");
+                        gloo::console::log!("1. Supabase URL/Key not set (check environment variables)");
+                        gloo::console::log!("2. Network connectivity issue");
+                        gloo::console::log!("3. CORS or authentication problems");
+                        gloo::console::log!("4. 406 error usually means missing Accept headers or wrong content type");
+                        gloo::console::log!("5. Table 'blog_posts' doesn't exist in your Supabase database");
+                    }
                     
                     // Set error message for user
                     error.set(Some(format!("Failed to connect to Supabase: {}", e)));

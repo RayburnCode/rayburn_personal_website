@@ -1,13 +1,13 @@
 // src/main.rs
 use dioxus::prelude::*;
- use tracing::info;
+use tracing::info;
 use views::{AppLayout, About, Blog, Contact, Home, Projects, Resume, BlogPostDetail, Protected, Callback, Login};
 
 mod components;
 mod views;
 mod api;
 
-use api::auth::AuthorizedClient;
+
 
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
@@ -78,7 +78,7 @@ async fn post_server_data(data: String) -> Result<(), ServerFnError> {
     Ok(()) 
 }
 
-#[server(name = GetServerData, client=AuthorizedClient)]
+#[server(name = GetServerData)]
 async fn get_server_data() -> Result<String, ServerFnError> {
     #[cfg(not(target_arch = "wasm32"))]
     {
