@@ -4,7 +4,7 @@
 
 # HTML title tag content
 title = "Portfolio"
-
+base_path = "rayburn_personal_website"
 # include `assets` in web platform
 [web.resource]
 
@@ -19,3 +19,7 @@ script = []
 # Javascript code file
 # serve: [dev-server] only
 script = []
+
+
+[bundle]
+icon = ["assets/favicon.ico"]
